@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdq0j521aok4l"]
+
+[ext_resource type="Script" path="res://addons/worktime_stopwatch/calendar/day_box.gd" id="1_hs0jh"]
+
+[node name="DayBox" type="ColorRect"]
+custom_minimum_size = Vector2(70, 70)
+color = Color(0, 0, 0, 1)
+script = ExtResource("1_hs0jh")
+
+[node name="DayNumberLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = -21.5
+offset_right = 21.5
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Day 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="TimeLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -11.5
+offset_right = 32.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+text = "00:00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeDifferenceLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0428571
+anchor_top = 0.285714
+anchor_right = 1.04286
+anchor_bottom = 1.28571
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "00:00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true

@@ -1,0 +1,4 @@
+[submodule "addons/worktime_stopwatch/gdextension/godot-cpp"]
+	path = addons/worktime_stopwatch/gdextension/godot-cpp
+	url = https://github.com/godotengine/godot-cpp
+	branch = 4.2
