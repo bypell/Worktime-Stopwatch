@@ -10,32 +10,25 @@ const SettingsDialog := preload("res://addons/worktime_stopwatch/settings_dialog
 var saved_data_instance
 var main_widget_instance : Control
 var settings_dialog_instance : Window
+var window_focused_notifier_instance : GlobalWindowFocusedNotifier
 
-#toremove
-@onready var fwn : GlobalWindowFocusedNotifier
 
 func _enter_tree() -> void:
-	fwn = GlobalWindowFocusedNotifier.new()
-	fwn.start_notifying()
-	
-	
-	
 	# load data
-	_prepare_data_for_use()
+	_load_or_create_saved_data()
 	
 	# instantiation
 	main_widget_instance = MainWidget.instantiate()
 	settings_dialog_instance = SettingsDialog.instantiate()
 	
-	# injecting data
-	settings_dialog_instance.starting_date = saved_data_instance.starting_date
-	main_widget_instance.elapsed_time = saved_data_instance.current_day_data.work_time
-	if main_widget_instance.elapsed_time > 0:
-		main_widget_instance.stopwatch_status = main_widget_instance.StopwatchStatuses.STOPPED
+	# window tracker
+	window_focused_notifier_instance = GlobalWindowFocusedNotifier.new()
+	window_focused_notifier_instance.start_notifying()
 	
 	# signals
 	main_widget_instance.settings_menu_opening_requested.connect(_open_settings_menu)
 	main_widget_instance.stopped_stopwatch.connect(_save_current_work_time)
+	main_widget_instance.reset_stopwatch.connect(_save_current_work_time)
 	main_widget_instance.started_stopwatch.connect(_save_current_work_time)
 	
 	# adding widget
@@ -43,13 +36,12 @@ func _enter_tree() -> void:
 	_add_widget_as_dock(main_widget_instance)
 	
 	# update widget displays with data
-	_update_main_widget_with_current_day_data()
-	_update_calendar_dialog()
-	settings_dialog_instance.refresh_starting_date_text()
+	_refresh_stopwatch_widget()
+	_refresh_calendar_dialog()
 
 
 func _exit_tree():
-	fwn.stop_notifying()#todelete
+	window_focused_notifier_instance.stop_notifying()
 	_save_current_work_time()
 	
 	remove_control_from_docks(main_widget_instance)
@@ -57,19 +49,15 @@ func _exit_tree():
 	settings_dialog_instance.queue_free()
 
 
-func _update_main_widget_with_current_day_data():
-	var day_number = saved_data_instance.current_day_data.day_number
-	var work_time = saved_data_instance.current_day_data.work_time
-	var target_time = saved_data_instance.current_day_data.target_work_time
-	
-	main_widget_instance.update_displayed_info(day_number, target_time, work_time)
+func _refresh_stopwatch_widget():
+	main_widget_instance.update_displayed_info(saved_data_instance)
 
 
-func _update_calendar_dialog():
-	settings_dialog_instance.update_displayed_info(saved_data_instance.current_day_data, saved_data_instance.previous_days_data)
+func _refresh_calendar_dialog():
+	settings_dialog_instance.update_displayed_info(saved_data_instance)
 
 
-func _prepare_data_for_use():
+func _load_or_create_saved_data():
 	var current_date = Time.get_date_dict_from_system()
 	if SavedData.verify_saved_data_exists():
 		# if data file exists, we load it
@@ -90,7 +78,6 @@ func _prepare_data_for_use():
 		current_day_data.target_work_time = 1200 # TODO: not hardcoded
 		
 		saved_data_instance.current_day_data = current_day_data
-		saved_data_instance.save_data()
 
 
 func _add_widget_as_dock(widget_instance):
@@ -106,8 +93,13 @@ func _open_settings_menu():
 	settings_dialog_instance.popup_centered()
 
 
+# append previous_current_day_data to previous_days_data
+# and initialize data for new day, including day_number, date, work_time = 0, figuring out target_work_time, etc
 func _switch_to_new_day():
 	var current_date = Time.get_date_dict_from_system()
+	if saved_data_instance.current_day_data.date == current_date:
+		return
+	
 	saved_data_instance.previous_days_data.append(saved_data_instance.current_day_data)
 	
 	var previous_current_day_data = saved_data_instance.current_day_data
@@ -134,8 +126,8 @@ func _save_current_work_time():
 	
 	if _is_current_date_newer_than_saved_current_date():
 		_switch_to_new_day()
-		_update_main_widget_with_current_day_data()
-		_update_calendar_dialog()
+		_refresh_stopwatch_widget()
+		_refresh_calendar_dialog()
 
 
 func _get_days_diff_between_date_dicts(date_dict_1 : Dictionary, date_dict_2 : Dictionary) -> int:

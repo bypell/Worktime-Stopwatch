@@ -25,12 +25,14 @@ func _notification(what : int) -> void:
 		hide()
 
 
-func refresh_starting_date_text():
+func update_displayed_info(saved_data_instance):
+	starting_date = saved_data_instance.starting_date
 	var starting_date_string = Time.get_date_string_from_unix_time((Time.get_unix_time_from_datetime_dict(starting_date)))
 	%StartingDateLabel.text = "Starting date: " + starting_date_string
-
-
-func update_displayed_info(current_day_data : Resource, previous_days_data : Array[Resource]):
+	
+	var current_day_data = saved_data_instance.current_day_data
+	var previous_days_data = saved_data_instance.previous_days_data
+	
 	for c in days_grid.get_children():
 		days_grid.remove_child(c)
 		c.queue_free()

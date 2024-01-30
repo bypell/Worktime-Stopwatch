@@ -1,18 +1,18 @@
-[gd_resource type="Resource" load_steps=8 format=3 uid="uid://bya2v2uin0g76"]
+[gd_resource type="Resource" load_steps=10 format=3 uid="uid://bya2v2uin0g76"]
 
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/calendar/day_data.gd" id="1_22fd5"]
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/save_load/saved_data.gd" id="2_y0ys4"]
 
-[sub_resource type="Resource" id="Resource_40jxt"]
+[sub_resource type="Resource" id="Resource_lrjy3"]
 script = ExtResource("1_22fd5")
-day_number = 6
+day_number = 8
 date = {
-"day": 28,
+"day": 30,
 "month": 1,
-"weekday": 0,
+"weekday": 2,
 "year": 2024
 }
-work_time = 0
+work_time = 1.61683
 target_work_time = 1200
 
 [sub_resource type="Resource" id="Resource_kjgjw"]
@@ -63,6 +63,30 @@ date = {
 work_time = 0
 target_work_time = 1200
 
+[sub_resource type="Resource" id="Resource_40jxt"]
+script = ExtResource("1_22fd5")
+day_number = 6
+date = {
+"day": 28,
+"month": 1,
+"weekday": 0,
+"year": 2024
+}
+work_time = 0
+target_work_time = 1200
+
+[sub_resource type="Resource" id="Resource_63yvr"]
+script = ExtResource("1_22fd5")
+day_number = 7
+date = {
+"day": 29,
+"month": 1,
+"weekday": 1,
+"year": 2024
+}
+work_time = 0
+target_work_time = 1200
+
 [resource]
 script = ExtResource("2_y0ys4")
 starting_date = {
@@ -71,5 +95,5 @@ starting_date = {
 "weekday": 2,
 "year": 2024
 }
-current_day_data = SubResource("Resource_40jxt")
-previous_days_data = Array[Resource]([SubResource("Resource_kjgjw"), SubResource("Resource_t4w1i"), SubResource("Resource_uh4uw"), SubResource("Resource_nvfxf")])
+current_day_data = SubResource("Resource_lrjy3")
+previous_days_data = Array[Resource]([SubResource("Resource_kjgjw"), SubResource("Resource_t4w1i"), SubResource("Resource_uh4uw"), SubResource("Resource_nvfxf"), SubResource("Resource_40jxt"), SubResource("Resource_63yvr")])

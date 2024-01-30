@@ -4,6 +4,7 @@ extends CenterContainer
 signal settings_menu_opening_requested
 signal stopped_stopwatch
 signal started_stopwatch
+signal reset_stopwatch
 
 enum StopwatchStatuses { RESET, COUNTING, STOPPED }
 
@@ -86,7 +87,7 @@ func _reset_accepted():
 	elapsed_time = 0.0
 	_update_elapsed_time_label(elapsed_time)
 	
-	stopped_stopwatch.emit()
+	reset_stopwatch.emit()
 
 
 func _update_elapsed_time_label(new_time : float):
@@ -100,10 +101,15 @@ func _format_time(time : float) -> String:
 	return "%02d:%02d:%02d" % [hours, minutes, seconds]
 
 
-func update_displayed_info(current_day_number : int, target_time : int, time : int):
-	if elapsed_time != 0:
+func update_displayed_info(saved_data_instance):
+	if elapsed_time > 0:
 		stopwatch_status = StopwatchStatuses.STOPPED
-	current_day_button.text = "Day " + str(current_day_number)
+	
+	var day_number = saved_data_instance.current_day_data.day_number
+	var work_time = saved_data_instance.current_day_data.work_time
+	var target_time = saved_data_instance.current_day_data.target_work_time
+	
+	current_day_button.text = "Day " + str(day_number)
 	target_time_label.text = _format_time(float(target_time))
-	elapsed_time = time
-	elapsed_time_label.text = _format_time(float(time))
+	elapsed_time = work_time
+	elapsed_time_label.text = _format_time(float(work_time))
