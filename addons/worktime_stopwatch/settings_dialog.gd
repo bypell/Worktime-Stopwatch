@@ -15,9 +15,9 @@ func _ready():
 		scroll_container.remove_theme_stylebox_override("panel")
 	
 	#var scroll_container_stylebox : StyleBox = get_theme_stylebox("Content", "EditorStyles")
-	scroll_container.add_theme_stylebox_override("panel", get_theme_stylebox("Content", "EditorStyles"))
+	scroll_container.add_theme_stylebox_override("panel", get_theme_stylebox("Background", "EditorStyles"))
 	
-	$Panel.color = get_theme_color("dark_color_1", "Editor")
+	$Panel.color = get_theme_color("base_color", "Editor")
 
 
 func _notification(what : int) -> void:

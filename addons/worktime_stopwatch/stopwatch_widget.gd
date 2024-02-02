@@ -8,8 +8,9 @@ signal reset_stopwatch
 
 enum StopwatchStatuses { RESET, COUNTING, STOPPED }
 
-var stopwatch_status = StopwatchStatuses.RESET
-var elapsed_time = 0.0
+var _stopwatch_status = StopwatchStatuses.RESET
+var _elapsed_time = 0.0
+var _stopwatch_blocked := false
 
 # theme-related variables
 @onready var start_icon = get_theme_icon("MainPlay", "EditorIcons")
@@ -39,35 +40,35 @@ func _ready():
 	
 	
 	# disable the reset button
-	if stopwatch_status == StopwatchStatuses.RESET:
+	if _stopwatch_status == StopwatchStatuses.RESET:
 		reset_button.disabled = true
 	
 	# first text update to labels
-	_update_elapsed_time_label(elapsed_time)
+	_update_elapsed_time_label(_elapsed_time)
 	
 	# connect signal
 	current_day_button.pressed.connect(func(): settings_menu_opening_requested.emit())
 	
 
 func _process(delta):
-	# if counting, add to elapsed_time and update the corresponding label
-	if stopwatch_status == StopwatchStatuses.COUNTING:
-		elapsed_time += delta
-		_update_elapsed_time_label(elapsed_time)
+	# if counting and not blocked, add to _elapsed_time and update the corresponding label
+	if _stopwatch_status == StopwatchStatuses.COUNTING and not _stopwatch_blocked:
+		_elapsed_time += delta
+		_update_elapsed_time_label(_elapsed_time)
 
 
 func _start_pause_button_pressed():
-	match stopwatch_status:
+	match _stopwatch_status:
 		StopwatchStatuses.RESET, StopwatchStatuses.STOPPED:
 			# if previously stopped or reset, should start counting
-			stopwatch_status = StopwatchStatuses.COUNTING
+			_stopwatch_status = StopwatchStatuses.COUNTING
 			start_pause_button.icon = pause_icon
 			reset_button.disabled = false
 			set_process(true)
 			started_stopwatch.emit()
 		StopwatchStatuses.COUNTING:
 			# if previously counting, should pause
-			stopwatch_status = StopwatchStatuses.STOPPED
+			_stopwatch_status = StopwatchStatuses.STOPPED
 			start_pause_button.icon = start_icon
 			reset_button.disabled = false
 			set_process(false)
@@ -79,19 +80,19 @@ func _reset_button_pressed():
 
 
 func _reset_accepted():
-	stopwatch_status = StopwatchStatuses.RESET
+	_stopwatch_status = StopwatchStatuses.RESET
 	start_pause_button.icon = start_icon
 	reset_button.disabled = true
 	set_process(false)
 	
-	elapsed_time = 0.0
-	_update_elapsed_time_label(elapsed_time)
+	_elapsed_time = 0.0
+	_update_elapsed_time_label(_elapsed_time)
 	
 	reset_stopwatch.emit()
 
 
 func _update_elapsed_time_label(new_time : float):
-	elapsed_time_label.text = _format_time(elapsed_time)
+	elapsed_time_label.text = _format_time(_elapsed_time)
 
 
 func _format_time(time : float) -> String:
@@ -102,14 +103,15 @@ func _format_time(time : float) -> String:
 
 
 func update_displayed_info(saved_data_instance):
-	if elapsed_time > 0:
-		stopwatch_status = StopwatchStatuses.STOPPED
-	
 	var day_number = saved_data_instance.current_day_data.day_number
 	var work_time = saved_data_instance.current_day_data.work_time
 	var target_time = saved_data_instance.current_day_data.target_work_time
 	
 	current_day_button.text = "Day " + str(day_number)
 	target_time_label.text = _format_time(float(target_time))
-	elapsed_time = work_time
+	_elapsed_time = work_time
 	elapsed_time_label.text = _format_time(float(work_time))
+	
+	if _elapsed_time > 0.0:
+		_stopwatch_status = StopwatchStatuses.STOPPED
+		reset_button.disabled = false
