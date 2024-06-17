@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/settings_dialog.gd" id="1_hjti2"]
 [ext_resource type="StyleBox" uid="uid://d0dqpg8jmfihg" path="res://addons/worktime_stopwatch/theme_override/focus_stylebox.tres" id="2_gbsle"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wgaln"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_odhxu"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -73,7 +73,7 @@ text = "Settings"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_wgaln")
+theme_override_styles/panel = SubResource("StyleBoxFlat_odhxu")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2

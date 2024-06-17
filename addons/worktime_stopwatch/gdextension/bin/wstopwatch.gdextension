@@ -1,8 +1,0 @@
-[configuration]
-
-entry_symbol = "wstopwatchutils_library_init"
-compatibility_minimum = "4.2"
-
-[libraries]
-
-windows.debug.x86_64 = "res://addons/worktime_stopwatch/gdextension/bin/libwstopwatchutils.windows.template_debug.x86_64.dll"
