@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ca8hdcsvl01q"]
 
-[ext_resource type="PackedScene" uid="uid://c6hdv8ptdlk8b" path="res://addons/worktime_stopwatch/time_select.tscn" id="1_apmk0"]
+[ext_resource type="PackedScene" uid="uid://c6hdv8ptdlk8b" path="res://addons/worktime_stopwatch/input_widgets/time_select.tscn" id="1_apmk0"]
 
 [node name="SettingsWindow" type="Node"]
 

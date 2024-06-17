@@ -4,30 +4,29 @@ extends EditorPlugin
 const SavedData = preload("res://addons/worktime_stopwatch/save_load/saved_data.gd")
 const DayData = preload("res://addons/worktime_stopwatch/calendar/day_data.gd")
 
-const MainWidget := preload("res://addons/worktime_stopwatch/stopwatch_widget.tscn")
-const CalendarDialog := preload("res://addons/worktime_stopwatch/calendar_dialog.tscn")
+const MainWidget := preload("res://addons/worktime_stopwatch/dock/stopwatch_dock.tscn")
+const CalendarDialog := preload("res://addons/worktime_stopwatch/calendar_dialog/calendar_dialog.tscn")
 
 var saved_data_instance
 var main_widget_instance : Control
 var calendar_window_instance : Window
-#var window_focused_notifier_instance : GlobalWindowFocusedNotifier
 
 
 func _enter_tree() -> void:
 	# load data
 	_load_or_create_saved_data()
 	
-	# instantiation
+	# instantiation of dock and windows
 	main_widget_instance = MainWidget.instantiate()
 	calendar_window_instance = CalendarDialog.instantiate()
 	
-	# signals
+	# connecting signals
 	main_widget_instance.settings_menu_opening_requested.connect(_open_settings_menu)
 	main_widget_instance.stopped_stopwatch.connect(_save_current_work_time)
 	main_widget_instance.reset_stopwatch.connect(_save_current_work_time)
 	main_widget_instance.started_stopwatch.connect(_save_current_work_time)
 	
-	# adding widget
+	# adding dock and windows
 	EditorInterface.get_base_control().add_child(calendar_window_instance)
 	_add_widget_as_dock(main_widget_instance)
 	
@@ -84,7 +83,7 @@ func _add_widget_as_dock(widget_instance):
 	
 	await get_tree().process_frame #disgusting
 	await get_tree().process_frame #disgusting
-	await get_tree().process_frame #disgusting
+	await get_tree().process_frame #still disgusting
 	
 	if vsplit is VSplitContainer:
 		vsplit.split_offset = 405
@@ -94,7 +93,7 @@ func _open_settings_menu():
 	calendar_window_instance.popup_centered()
 
 
-# appends data from the current (outdated) day to previous_days_data
+# Appends data from the current (outdated) day to previous_days_data
 # and initializes data for a new day, including day_number, date, work_time = 0, figuring out target_work_time, etc.
 func _switch_to_new_day():
 	var current_date = Time.get_date_dict_from_system()
@@ -120,6 +119,7 @@ func _switch_to_new_day():
 
 
 # Saves current progress and if the date is no longer the same, makes the necessary calls to switch to a new day
+# TODO: separate both actions into different functions
 func _save_current_work_time():
 	if not SavedData.verify_saved_data_exists():
 		push_warning("Couldn't save current work time. (data file not found)")

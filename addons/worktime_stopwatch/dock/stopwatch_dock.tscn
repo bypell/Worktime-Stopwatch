@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bbumoasujo2n1"]
 
-[ext_resource type="Script" path="res://addons/worktime_stopwatch/stopwatch_widget.gd" id="1_ldkjy"]
+[ext_resource type="Script" path="res://addons/worktime_stopwatch/dock/stopwatch_dock.gd" id="1_ldkjy"]
 [ext_resource type="StyleBox" uid="uid://d0dqpg8jmfihg" path="res://addons/worktime_stopwatch/theme_override/focus_stylebox.tres" id="2_l16gx"]
 
 [sub_resource type="Image" id="Image_53x0y"]
