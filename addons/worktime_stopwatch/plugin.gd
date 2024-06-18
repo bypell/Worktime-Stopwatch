@@ -125,7 +125,7 @@ func _save_current_work_time():
 		push_warning("Couldn't save current work time. (data file not found)")
 		return
 	
-	saved_data_instance.current_day_data.work_time = main_widget_instance._elapsed_time
+	saved_data_instance.current_day_data.work_time = main_widget_instance.get_elapsed_time()
 	saved_data_instance.save_data()
 	
 	if _is_current_date_newer_than_saved_current_date():
