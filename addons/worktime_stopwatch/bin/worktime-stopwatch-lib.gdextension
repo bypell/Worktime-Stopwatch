@@ -1,0 +1,15 @@
+[configuration]
+
+entry_symbol = "stopwatch_library_init"
+compatibility_minimum = "4.2"
+
+[libraries]
+
+linux.x86_64.debug ="res://addons/worktime_stopwatch/bin/worktime-stopwatch-lib.linux.template_debug.x86_64.so"
+linux.x86_64.release = "res://addons/worktime_stopwatch/bin/worktime-stopwatch-lib.linux.template_release.x86_64.so"
+linux.debug.arm64 = "res://addons/worktime_stopwatch/bin/worktime-stopwatch-lib.linux.template_debug.arm64.so"
+linux.release.arm64 = "res://addons/worktime_stopwatch/bin/worktime-stopwatch-lib.linux.template_release.arm64.so"
+windows.x86_64.debug = "res://addons/worktime_stopwatch/bin/worktime-stopwatch-lib.windows.template_debug.x86_64.dll"
+windows.x86_64.release = "res://addons/worktime_stopwatch/bin/worktime-stopwatch-lib.windows.template_release.x86_64.dll"
+macos.debug = "res://addons/worktime_stopwatch/bin/worktime-stopwatch-lib.macos.template_debug.universal.dylib"
+macos.release = "res://addons/worktime_stopwatch/bin/worktime-stopwatch-lib.macos.template_release.universal.dylib"
