@@ -86,8 +86,7 @@ void Stopwatch::refresh_check_current_window()
     // godot window check
     if (check_godot_window_foreground)
     {
-        // print to godot console
-        UtilityFunctions::print("Checking godot window");
+        // UtilityFunctions::print("Checking godot window");
 
         PackedInt32Array windows = DisplayServer::get_singleton()->get_window_list();
         for (int i = 0; i < windows.size(); i++)
@@ -96,13 +95,13 @@ void Stopwatch::refresh_check_current_window()
             if (DisplayServer::get_singleton()->window_is_focused(windows[i]))
             {
                 should_block = false;
-                UtilityFunctions::print("decided to not block");
+                // UtilityFunctions::print("decided to not block");
                 break;
             }
             else
             {
                 should_block = true;
-                UtilityFunctions::print("decided to block");
+                // UtilityFunctions::print("decided to block");
             }
         }
     }
@@ -111,7 +110,7 @@ void Stopwatch::refresh_check_current_window()
     std::string title_str = _get_active_window_title();
     if ((should_block || !check_godot_window_foreground) && check_other_windows_foreground)
     {
-        UtilityFunctions::print("checking other windows");
+        // UtilityFunctions::print("checking other windows");
         for (int i = 0; i < other_windows_keywords.size(); i++)
         {
             String keyword = other_windows_keywords[i];
@@ -121,18 +120,18 @@ void Stopwatch::refresh_check_current_window()
             if (title.find(keyword) != -1)
             {
                 should_block = false;
-                UtilityFunctions::print("decided to not block");
+                // UtilityFunctions::print("decided to not block");
                 break;
             }
             else
             {
                 should_block = true;
-                UtilityFunctions::print("decided to block");
+                // UtilityFunctions::print("decided to block");
             }
         }
     }
 
-    UtilityFunctions::print("--------------------");
+    // UtilityFunctions::print("--------------------");
 
     // apply
     if (should_block)
