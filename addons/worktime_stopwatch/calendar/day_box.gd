@@ -48,9 +48,10 @@ func _ready() -> void:
 		time_difference_label.add_theme_color_override("font_color", failed_color)
 
 
-func _format_time(time : float) -> String:
-	var t = abs(time)
-	var hours = int(t) / 3600
-	var minutes = (int(t) % 3600) / 60
-	var seconds = int(t) % 60
+func _format_time(milliseconds : float) -> String:
+	var t := abs(milliseconds)
+	var total_seconds = int(t) / 1000
+	var hours = int(total_seconds / 3600)
+	var minutes = int(total_seconds / 60) % 60
+	var seconds = int(total_seconds) % 60
 	return "%02d:%02d:%02d" % [hours, minutes, seconds]

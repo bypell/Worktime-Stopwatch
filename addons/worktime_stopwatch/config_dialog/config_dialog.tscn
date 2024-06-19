@@ -1,0 +1,168 @@
+[gd_scene load_steps=5 format=3 uid="uid://nntvl76rwuvf"]
+
+[ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/config_dialog.gd" id="1_4yrt7"]
+[ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/calendar_ui.gd" id="2_o3enq"]
+[ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/settings_ui.gd" id="3_2k87h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pr7h5"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0.365, 0.365, 1)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_detail = 1
+
+[node name="ConfigDialog" type="Window"]
+title = "Worktime Stopwatch"
+initial_position = 1
+size = Vector2i(570, 560)
+wrap_controls = true
+transient = true
+unresizable = true
+script = ExtResource("1_4yrt7")
+
+[node name="Panel" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TabContainer" type="TabContainer" parent="."]
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 1
+
+[node name="Calendar" type="MarginContainer" parent="TabContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("2_o3enq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Calendar"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Calendar/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="StartingDateLabel" type="Label" parent="TabContainer/Calendar/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Starting date: 1970-01-01"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Calendar/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_pr7h5")
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Calendar/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="DaysGrid" type="GridContainer" parent="TabContainer/Calendar/VBoxContainer/ScrollContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 7
+
+[node name="Settings" type="MarginContainer" parent="TabContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("3_2k87h")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Settings"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Settings/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="FocusedWindow" type="VBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FocusedWindowLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
+layout_mode = 2
+text = "Only active when focused window is:"
+
+[node name="FocusedGodotCheckBox" type="CheckBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Godot project window"
+
+[node name="FocusedOtherCheckBox" type="CheckBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Window with one of these keywords in its title:"
+
+[node name="FocusedOtherTextEdit" type="TextEdit" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+virtual_keyboard_enabled = false
+wrap_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Settings/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SaveButton" type="Button" parent="TabContainer/Settings/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Save Settings"
+
+[node name="CancelButton" type="Button" parent="TabContainer/Settings/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Cancel"
+
+[node name="ResetButton" type="Button" parent="TabContainer/Settings/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Reset settings to default"
+
+[node name="ResetConfirmationDialog" type="ConfirmationDialog" parent="TabContainer/Settings/VBoxContainer/HBoxContainer/ResetButton"]
+unique_name_in_owner = true
+position = Vector2i(0, 36)
+size = Vector2i(295, 100)
+dialog_text = "Reset settings to the default values?"
+
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/FocusedGodotCheckBox" to="TabContainer/Settings" method="_setting_changed"]
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/FocusedOtherCheckBox" to="TabContainer/Settings" method="_setting_changed"]
+[connection signal="text_changed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/FocusedOtherTextEdit" to="TabContainer/Settings" method="_setting_changed"]
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/SaveButton" to="TabContainer/Settings" method="_read_ui_and_save_settings"]
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/CancelButton" to="TabContainer/Settings" method="_set_ui_to_settings"]
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/ResetButton" to="TabContainer/Settings" method="_reset_settings_requested"]
+[connection signal="confirmed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/ResetButton/ResetConfirmationDialog" to="TabContainer/Settings" method="_reset_settings_accepted"]

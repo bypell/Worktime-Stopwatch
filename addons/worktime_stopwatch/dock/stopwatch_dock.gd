@@ -8,7 +8,10 @@ signal reset_stopwatch
 
 enum StopwatchStatuses { RESET, COUNTING, STOPPED }
 
+const REFRESH_CHECK_WINDOW_DELAY := 1.0
+
 var _stopwatch_status = StopwatchStatuses.RESET
+var _refresh_check_window_cooldown := REFRESH_CHECK_WINDOW_DELAY
 
 # stopwatch
 @onready var _stopwatch := Stopwatch.new()
@@ -52,6 +55,12 @@ func _ready():
 	
 
 func _process(delta):
+	# refresh
+	_refresh_check_window_cooldown -= delta
+	if _refresh_check_window_cooldown <= 0.0:
+		_stopwatch.refresh_check_current_window()
+		_refresh_check_window_cooldown = REFRESH_CHECK_WINDOW_DELAY
+	
 	# if counting and not blocked, add to _elapsed_time and update the corresponding label
 	if _stopwatch_status == StopwatchStatuses.COUNTING:
 		_refresh_elapsed_time_label()
@@ -123,3 +132,14 @@ func update_displayed_info(saved_data_instance):
 
 func get_elapsed_time():
 	return _stopwatch.get_current_time()
+
+
+func settings_updated(settings: Object):
+	_stopwatch.set_check_godot_window_foreground(settings.godot_project_window)
+	_stopwatch.set_check_other_windows_foreground(settings.other_windows)
+	
+	var keywords: Array[String] = []
+	for k in settings.other_windows_keywords.split(",", true):
+		keywords.append(k.strip_edges())
+	
+	_stopwatch.set_other_windows_keywords(keywords)

@@ -1,7 +1,7 @@
 @tool
 extends Resource
 
-const SAVE_DATA_PATH := "res://addons/worktime_stopwatch_saved_data.tres"
+const SAVE_DATA_PATH := "res://addons/worktime_stopwatch_saved_data.res"
 
 @export var starting_date : Dictionary = {}
 @export var current_day_data : Resource = null

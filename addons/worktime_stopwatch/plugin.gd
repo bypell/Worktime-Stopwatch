@@ -5,43 +5,61 @@ const SavedData = preload("res://addons/worktime_stopwatch/save_load/saved_data.
 const DayData = preload("res://addons/worktime_stopwatch/calendar/day_data.gd")
 
 const MainWidget := preload("res://addons/worktime_stopwatch/dock/stopwatch_dock.tscn")
-const CalendarDialog := preload("res://addons/worktime_stopwatch/calendar_dialog/calendar_dialog.tscn")
+const ConfigDialog := preload("res://addons/worktime_stopwatch/config_dialog/config_dialog.tscn")
+const Settings := preload("res://addons/worktime_stopwatch/save_load/settings.gd")
 
 var saved_data_instance
 var main_widget_instance : Control
-var calendar_window_instance : Window
+var config_window_instance : Window
+var settings : Object
 
 
 func _enter_tree() -> void:
 	# load data
 	_load_or_create_saved_data()
 	
-	# instantiation of dock and windows
-	main_widget_instance = MainWidget.instantiate()
-	calendar_window_instance = CalendarDialog.instantiate()
+	# load settings and start listening to changes
+	settings = Settings.new()
+	if not FileAccess.file_exists(settings.FILE_PATH):
+		settings.load_default_settings()
+		settings.save()
+	else:
+		settings.load_settings()
+	settings.settings_updated.connect(_on_settings_updated)
 	
-	# connecting signals
-	main_widget_instance.settings_menu_opening_requested.connect(_open_settings_menu)
+	# instantiation of dock and config window
+	main_widget_instance = MainWidget.instantiate()
+	config_window_instance = ConfigDialog.instantiate()
+	
+	# connecting widget signals
+	main_widget_instance.settings_menu_opening_requested.connect(_open_config_menu)
 	main_widget_instance.stopped_stopwatch.connect(_save_current_work_time)
 	main_widget_instance.reset_stopwatch.connect(_save_current_work_time)
 	main_widget_instance.started_stopwatch.connect(_save_current_work_time)
 	
+	# setting up settings ui
+	config_window_instance.setup_settings_ui.bind(settings).call_deferred()
+	
 	# adding dock and windows
-	EditorInterface.get_base_control().add_child(calendar_window_instance)
+	EditorInterface.get_base_control().add_child(config_window_instance)
 	_add_widget_as_dock(main_widget_instance)
 	
 	# update widget displays with data
 	_refresh_stopwatch_widget()
 	_refresh_calendar_dialog()
+	main_widget_instance.settings_updated(settings)
 
 
 func _exit_tree():
-	#window_focused_notifier_instance.stop_notifying()
 	_save_current_work_time()
 	
 	remove_control_from_docks(main_widget_instance)
 	main_widget_instance.queue_free()
-	calendar_window_instance.queue_free()
+	config_window_instance.queue_free()
+
+
+func _on_settings_updated():
+	main_widget_instance.settings_updated(settings)
 
 
 func _refresh_stopwatch_widget():
@@ -49,7 +67,7 @@ func _refresh_stopwatch_widget():
 
 
 func _refresh_calendar_dialog():
-	calendar_window_instance.update_displayed_info(saved_data_instance)
+	config_window_instance.update_displayed_info(saved_data_instance)
 
 
 func _load_or_create_saved_data():
@@ -70,7 +88,7 @@ func _load_or_create_saved_data():
 		current_day_data.day_number = 1
 		current_day_data.date = current_date
 		current_day_data.work_time = 0
-		current_day_data.target_work_time = 1200 # TODO: not hardcoded
+		current_day_data.target_work_time = 1200000 # TODO: not hardcoded
 		
 		saved_data_instance.current_day_data = current_day_data
 
@@ -86,11 +104,11 @@ func _add_widget_as_dock(widget_instance):
 	await get_tree().process_frame #still disgusting
 	
 	if vsplit is VSplitContainer:
-		vsplit.split_offset = 405
+		vsplit.split_offset = 415
 
 
-func _open_settings_menu():
-	calendar_window_instance.popup_centered()
+func _open_config_menu():
+	config_window_instance.popup_centered()
 
 
 # Appends data from the current (outdated) day to previous_days_data
@@ -112,7 +130,7 @@ func _switch_to_new_day():
 			)
 	new_current_day_data.date = current_date
 	new_current_day_data.work_time = 0
-	new_current_day_data.target_work_time = 1200 # TODO: not hardcoded
+	new_current_day_data.target_work_time = 1200000 # TODO: not hardcoded
 	
 	saved_data_instance.current_day_data = new_current_day_data
 	#saved_data_instance.save_data()
@@ -121,10 +139,6 @@ func _switch_to_new_day():
 # Saves current progress and if the date is no longer the same, makes the necessary calls to switch to a new day
 # TODO: separate both actions into different functions
 func _save_current_work_time():
-	if not SavedData.verify_saved_data_exists():
-		push_warning("Couldn't save current work time. (data file not found)")
-		return
-	
 	saved_data_instance.current_day_data.work_time = main_widget_instance.get_elapsed_time()
 	saved_data_instance.save_data()
 	
