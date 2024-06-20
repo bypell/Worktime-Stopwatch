@@ -56,6 +56,8 @@ func _exit_tree():
 	remove_control_from_docks(main_widget_instance)
 	main_widget_instance.queue_free()
 	config_window_instance.queue_free()
+	
+	settings.free()
 
 
 func _on_settings_updated():
