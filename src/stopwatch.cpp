@@ -15,6 +15,7 @@ void Stopwatch::_bind_methods()
     ClassDB::bind_method(D_METHOD("start"), &Stopwatch::start);
     ClassDB::bind_method(D_METHOD("stop"), &Stopwatch::stop);
     ClassDB::bind_method(D_METHOD("reset"), &Stopwatch::reset);
+    ClassDB::bind_method(D_METHOD("ping"), &Stopwatch::ping);
     ClassDB::bind_method(D_METHOD("set_check_godot_window_foreground", "check"), &Stopwatch::set_check_godot_window_foreground);
     ClassDB::bind_method(D_METHOD("set_check_other_windows_foreground", "check"), &Stopwatch::set_check_other_windows_foreground);
     ClassDB::bind_method(D_METHOD("set_other_windows_keywords", "titles"), &Stopwatch::set_other_windows_keywords);
@@ -23,51 +24,51 @@ void Stopwatch::_bind_methods()
 // Start the stopwatch.
 void Stopwatch::start()
 {
-    if (!is_running)
+    if (!_is_running)
     {
-        is_blocked = false;
-        start_time = std::chrono::steady_clock::now();
-        is_running = true;
+        _is_blocked = false;
+        _start_time = std::chrono::steady_clock::now();
+        _is_running = true;
     }
 }
 
 // Stop the stopwatch.
 void Stopwatch::stop()
 {
-    if (is_running)
+    if (_is_running)
     {
         auto now = std::chrono::steady_clock::now();
-        elapsed_time += std::chrono::duration_cast<std::chrono::milliseconds>(now - start_time);
-        is_running = false;
+        _elapsed_time += std::chrono::duration_cast<std::chrono::milliseconds>(now - _start_time);
+        _is_running = false;
     }
 }
 
 // Reset the stopwatch.
 void Stopwatch::reset()
 {
-    elapsed_time = std::chrono::milliseconds{0};
-    is_running = false;
+    _elapsed_time = std::chrono::milliseconds{0};
+    _is_running = false;
 }
 
 // Get the current time in milliseconds.
 uint32_t Stopwatch::get_current_time() const
 {
-    if (is_running)
+    if (_is_running)
     {
         auto now = std::chrono::steady_clock::now();
-        auto current_elapsed_time = elapsed_time + std::chrono::duration_cast<std::chrono::milliseconds>(now - start_time);
+        auto current_elapsed_time = _elapsed_time + std::chrono::duration_cast<std::chrono::milliseconds>(now - _start_time);
         return static_cast<uint32_t>(current_elapsed_time.count());
     }
     else
     {
-        return static_cast<uint32_t>(elapsed_time.count());
+        return static_cast<uint32_t>(_elapsed_time.count());
     }
 }
 
 // Set the current time in milliseconds.
 uint32_t Stopwatch::set_current_time(uint32_t time)
 {
-    elapsed_time = std::chrono::milliseconds{time};
+    _elapsed_time = std::chrono::milliseconds{time};
     return time;
 }
 
@@ -76,7 +77,7 @@ void Stopwatch::refresh_check_current_window()
 {
 
     // if both checks are false, return
-    if (!check_godot_window_foreground && !check_other_windows_foreground)
+    if (!_check_godot_window_foreground && !_check_other_windows_foreground)
     {
         return;
     }
@@ -84,7 +85,7 @@ void Stopwatch::refresh_check_current_window()
     bool should_block = false;
 
     // godot window check
-    if (check_godot_window_foreground)
+    if (_check_godot_window_foreground)
     {
         // UtilityFunctions::print("Checking godot window");
 
@@ -108,12 +109,12 @@ void Stopwatch::refresh_check_current_window()
 
     // other windows check
     std::string title_str = _get_active_window_title();
-    if ((should_block || !check_godot_window_foreground) && check_other_windows_foreground)
+    if ((should_block || !_check_godot_window_foreground) && _check_other_windows_foreground)
     {
         // UtilityFunctions::print("checking other windows");
-        for (int i = 0; i < other_windows_keywords.size(); i++)
+        for (int i = 0; i < _other_windows_keywords.size(); i++)
         {
-            String keyword = other_windows_keywords[i];
+            String keyword = _other_windows_keywords[i];
             String title = String(title_str.c_str()).to_lower();
             keyword = keyword.to_lower();
 
@@ -136,38 +137,58 @@ void Stopwatch::refresh_check_current_window()
     // apply
     if (should_block)
     {
-        if (is_running)
+        if (_is_running)
         {
-            is_blocked = true;
+            _is_blocked = true;
             stop();
         }
     }
     else
     {
-        if (is_blocked)
+        if (_is_blocked)
         {
-            is_blocked = false;
+            _is_blocked = false;
             start();
         }
+    }
+}
+
+// Pings the stopwatch (if time between pings is too long, the stopwatch will undo the time elapsed)
+// this is to make sure that the stopwatch can realise when the user has put their OS into hibernation and that the start time should not be trusted
+void Stopwatch::ping()
+{
+    // if (_last_ping_time == std::chrono::steady_clock::time_point())
+    // {
+    //     _last_ping_time = std::chrono::steady_clock::now();
+    //     return;
+    // }
+
+    auto now = std::chrono::steady_clock::now();
+    auto time_since_last_ping = std::chrono::duration_cast<std::chrono::milliseconds>(now - _last_ping_time);
+    _last_ping_time = now;
+
+    if (time_since_last_ping.count() > 10000)
+    {
+        _start_time = now;
     }
 }
 
 // Set the check for the godot window foreground
 void Stopwatch::set_check_godot_window_foreground(const bool check)
 {
-    check_godot_window_foreground = check;
+    _check_godot_window_foreground = check;
 }
 
 // Set the check for the other windows foreground
 void Stopwatch::set_check_other_windows_foreground(const bool check)
 {
-    check_other_windows_foreground = check;
+    _check_other_windows_foreground = check;
 }
 
 // Set the titles of the other windows to check
 void Stopwatch::set_other_windows_keywords(const TypedArray<String> &titles)
 {
-    other_windows_keywords = titles;
+    _other_windows_keywords = titles;
 }
 
 // Function to get the title of the foreground  window

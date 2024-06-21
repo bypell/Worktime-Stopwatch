@@ -59,6 +59,7 @@ func _process(delta):
 	_refresh_check_window_cooldown -= delta
 	if _refresh_check_window_cooldown <= 0.0:
 		_stopwatch.refresh_check_current_window()
+		_stopwatch.ping()
 		_refresh_check_window_cooldown = REFRESH_CHECK_WINDOW_DELAY
 	
 	# if counting and not blocked, add to _elapsed_time and update the corresponding label
