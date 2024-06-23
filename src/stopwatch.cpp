@@ -72,7 +72,7 @@ uint32_t Stopwatch::set_current_time(uint32_t time)
     return time;
 }
 
-// Checks the current window title
+// Checks the current window title and blocks the stopwatch if necessary
 void Stopwatch::refresh_check_current_window()
 {
 
@@ -169,7 +169,7 @@ void Stopwatch::ping()
 
     if (time_since_last_ping.count() > 10000)
     {
-        _start_time = now;
+        _start_time += time_since_last_ping;
     }
 }
 
