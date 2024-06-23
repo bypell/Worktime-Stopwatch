@@ -41,6 +41,7 @@ func _enter_tree() -> void:
 	config_window_instance.setup_settings_ui.bind(settings).call_deferred()
 	
 	# adding dock and windows
+	config_window_instance.hide()
 	EditorInterface.get_base_control().add_child(config_window_instance)
 	_add_widget_as_dock(main_widget_instance)
 	

@@ -25,16 +25,16 @@ func load_default_settings():
 func are_settings_default() -> bool:
 	var checks : Array[Callable] = [
 		func(): return godot_project_window == true,
-		func(): return godot_project_window == true,
+		func(): return other_windows == true,
 		func(): return other_windows_keywords == \
 				"Blender, Krita, Paint, Aseprite, LMMS, Audacity, FL Studio"
 	]
 	
-	var are_default := false
 	for c in checks:
-		are_default = are_default and c.call()
+		if not c.call():
+			return false
 	
-	return are_default
+	return true
 
 
 func load_settings() -> int:
