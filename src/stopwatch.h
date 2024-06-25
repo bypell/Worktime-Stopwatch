@@ -35,7 +35,7 @@ namespace godot
         void stop();
         void reset();
         void ping();
-        uint32_t get_current_time() const;
+        uint32_t get_current_time();
         uint32_t set_current_time(const uint32_t time);
         void refresh_check_current_window();
         void set_check_godot_window_foreground(const bool check);

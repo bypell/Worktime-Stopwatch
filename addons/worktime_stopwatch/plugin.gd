@@ -32,7 +32,7 @@ func _enter_tree() -> void:
 	config_window_instance = ConfigDialog.instantiate()
 	
 	# connecting widget signals
-	main_widget_instance.settings_menu_opening_requested.connect(_open_config_menu)
+	main_widget_instance.settings_menu_opening_requested.connect(func(): config_window_instance.popup_centered())
 	main_widget_instance.stopped_stopwatch.connect(_save_current_work_time)
 	main_widget_instance.reset_stopwatch.connect(_save_current_work_time)
 	main_widget_instance.started_stopwatch.connect(_save_current_work_time)
@@ -108,10 +108,6 @@ func _add_widget_as_dock(widget_instance):
 	
 	if vsplit is VSplitContainer:
 		vsplit.split_offset = 415
-
-
-func _open_config_menu():
-	config_window_instance.popup_centered()
 
 
 # Appends data from the current (outdated) day to previous_days_data

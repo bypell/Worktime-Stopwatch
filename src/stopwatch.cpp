@@ -38,24 +38,41 @@ void Stopwatch::stop()
     if (_is_running)
     {
         auto now = std::chrono::steady_clock::now();
+
+        if (_start_time == std::chrono::steady_clock::time_point())
+        {
+            _start_time = now;
+        }
+
         _elapsed_time += std::chrono::duration_cast<std::chrono::milliseconds>(now - _start_time);
         _is_running = false;
     }
 }
 
-// Reset the stopwatch.
+// Stop and reset the stopwatch.
 void Stopwatch::reset()
 {
+    if (_is_running)
+    {
+        stop();
+    }
+
     _elapsed_time = std::chrono::milliseconds{0};
     _is_running = false;
 }
 
 // Get the current time in milliseconds.
-uint32_t Stopwatch::get_current_time() const
+uint32_t Stopwatch::get_current_time()
 {
     if (_is_running)
     {
         auto now = std::chrono::steady_clock::now();
+
+        if (_start_time == std::chrono::steady_clock::time_point())
+        {
+            return static_cast<uint32_t>(_elapsed_time.count());
+        }
+
         auto current_elapsed_time = _elapsed_time + std::chrono::duration_cast<std::chrono::milliseconds>(now - _start_time);
         return static_cast<uint32_t>(current_elapsed_time.count());
     }
@@ -65,9 +82,14 @@ uint32_t Stopwatch::get_current_time() const
     }
 }
 
-// Set the current time in milliseconds.
+// Set the current time in milliseconds. Also stops the stopwatch beforehand.
 uint32_t Stopwatch::set_current_time(uint32_t time)
 {
+    if (_is_running)
+    {
+        stop();
+    }
+
     _elapsed_time = std::chrono::milliseconds{time};
     return time;
 }
@@ -157,11 +179,11 @@ void Stopwatch::refresh_check_current_window()
 // this is to make sure that the stopwatch can realise when the user has put their OS into hibernation and that the start time should not be trusted
 void Stopwatch::ping()
 {
-    // if (_last_ping_time == std::chrono::steady_clock::time_point())
-    // {
-    //     _last_ping_time = std::chrono::steady_clock::now();
-    //     return;
-    // }
+    if (_last_ping_time == std::chrono::steady_clock::time_point())
+    {
+        _last_ping_time = std::chrono::steady_clock::now();
+        return;
+    }
 
     auto now = std::chrono::steady_clock::now();
     auto time_since_last_ping = std::chrono::duration_cast<std::chrono::milliseconds>(now - _last_ping_time);

@@ -7,6 +7,8 @@ extends Window
 
 
 func _ready():
+	$TabContainer.current_tab = 0
+	
 	# theming
 	if scroll_container.has_theme_stylebox_override("panel"):
 		scroll_container.remove_theme_stylebox_override("panel")

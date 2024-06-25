@@ -4,6 +4,9 @@
 
 [node name="DayBox" type="ColorRect"]
 custom_minimum_size = Vector2(70, 70)
+tooltip_text = "1970-01-01
+
+Day 1:"
 color = Color(0, 0, 0, 1)
 script = ExtResource("1_hs0jh")
 

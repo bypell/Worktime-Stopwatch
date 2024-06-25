@@ -27,7 +27,7 @@ var _refresh_check_window_cooldown := REFRESH_CHECK_WINDOW_DELAY
 @onready var reset_button = %ResetButton
 @onready var reset_confirmation_dialog: ConfirmationDialog = %ResetConfirmationDialog
 
-@onready var elapsed_time_label = %ElapsedTimeLabel
+@onready var elapsed_time_label = %CurrentWorkTimeLabel
 @onready var target_time_label = %TargetTimeLabel
 
 
@@ -52,7 +52,7 @@ func _ready():
 	
 	# connect signal
 	current_day_button.pressed.connect(func(): settings_menu_opening_requested.emit())
-	
+
 
 func _process(delta):
 	# refresh

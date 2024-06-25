@@ -5,7 +5,7 @@ var in_progress : bool = false
 var skipped : bool = false
 var day_number : int = 1
 var time := 0
-var target_time := 0
+var target_time : int
 var date : Dictionary
 
 @onready var day_number_label : Label = $DayNumberLabel
@@ -18,6 +18,11 @@ var date : Dictionary
 
 func _ready() -> void:
 	color = get_theme_color("dark_color_1", "Editor")
+	
+	if not date:
+		return
+	
+	_set_tooltip()
 	
 	day_number_label.text = "Day " + str(day_number)
 	
@@ -46,6 +51,21 @@ func _ready() -> void:
 		time_difference_label.add_theme_color_override("font_color", success_color)
 	elif prefix == "-":
 		time_difference_label.add_theme_color_override("font_color", failed_color)
+	
+
+func _set_tooltip():
+	var tooltip_str := ""
+	
+	var date_str = Time.get_date_string_from_unix_time((Time.get_unix_time_from_datetime_dict(date)))
+	
+	tooltip_text = "%s%s%s%s%s%s" % [
+		date_str,
+		"\n\nDay %s:" % str(day_number),
+		"\nToday (in progress)" if in_progress else "",
+		"\nThis day was skipped \n(project was not opened at all)" if skipped else "",
+		("\nMinimum work time: " + _format_time(target_time) if target_time else ""),
+		("\nWork time: " + _format_time(time) if time or target_time else ""),
+	]
 
 
 func _format_time(milliseconds : float) -> String:

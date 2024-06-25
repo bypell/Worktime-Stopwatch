@@ -3,6 +3,8 @@ extends Node
 
 var settings : Object
 
+@onready var daily_work_time_spin_box: SpinBox = %DailyWorkTimeSpinBox
+
 @onready var focused_godot_check_box: CheckBox = %FocusedGodotCheckBox
 @onready var focused_other_check_box: CheckBox = %FocusedOtherCheckBox
 @onready var focused_other_text_edit: TextEdit = %FocusedOtherTextEdit
@@ -26,24 +28,33 @@ func _setting_changed():
 
 
 func _read_ui_and_save_settings():
+	# daily worktime section
+	settings.current_daily_work_time_minutes = daily_work_time_spin_box.value
+	
 	# focused window section
 	settings.godot_project_window = focused_godot_check_box.button_pressed
 	settings.other_windows = focused_other_check_box.button_pressed
 	settings.other_windows_keywords = focused_other_text_edit.text
 	
+	# saving
 	settings.save()
 	
+	# buttons
 	save_button.disabled = true
 	cancel_button.disabled = true
 	reset_button.disabled = settings.are_settings_default()
 
 
 func _set_ui_to_settings():
+	# daily worktime section
+	daily_work_time_spin_box.value = settings.current_daily_work_time_minutes
+	
 	# focused window section
 	focused_godot_check_box.button_pressed = settings.godot_project_window
 	focused_other_check_box.button_pressed = settings.other_windows
 	focused_other_text_edit.text = settings.other_windows_keywords
 	
+	# buttons
 	save_button.disabled = true
 	cancel_button.disabled = true
 	reset_button.disabled = settings.are_settings_default()
