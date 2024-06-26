@@ -64,7 +64,7 @@ func _set_tooltip():
 		"\nToday (in progress)" if in_progress else "",
 		"\nThis day was skipped \n(project was not opened at all)" if skipped else "",
 		("\nMinimum work time: " + _format_time(target_time) if target_time else ""),
-		("\nWork time: " + _format_time(time) if time or target_time else ""),
+		("\nWork time done: " + _format_time(time) if time or target_time else ""),
 	]
 
 
