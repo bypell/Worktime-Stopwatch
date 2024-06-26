@@ -61,6 +61,9 @@ func _process(delta):
 		_stopwatch.refresh_check_current_window()
 		_stopwatch.ping()
 		_refresh_check_window_cooldown = REFRESH_CHECK_WINDOW_DELAY
+		
+		if Input.is_key_pressed(KEY_0):
+			_stopwatch.set_current_time(_stopwatch.get_current_time() + 60000)
 	
 	# if counting and not blocked, add to _elapsed_time and update the corresponding label
 	if _stopwatch_status == StopwatchStatuses.COUNTING:
@@ -74,7 +77,6 @@ func _start_pause_button_pressed():
 			_stopwatch_status = StopwatchStatuses.COUNTING
 			start_pause_button.icon = pause_icon
 			reset_button.disabled = false
-			set_process(true)
 			started_stopwatch.emit()
 			_stopwatch.start()
 		StopwatchStatuses.COUNTING:
@@ -82,7 +84,6 @@ func _start_pause_button_pressed():
 			_stopwatch_status = StopwatchStatuses.STOPPED
 			start_pause_button.icon = start_icon
 			reset_button.disabled = false
-			set_process(false)
 			stopped_stopwatch.emit()
 			_stopwatch.stop()
 

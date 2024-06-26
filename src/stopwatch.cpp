@@ -73,9 +73,6 @@ uint32_t Stopwatch::get_current_time()
             return static_cast<uint32_t>(_elapsed_time.count());
         }
 
-        // convert elapsed time to godot string and print
-        UtilityFunctions::print(String::num_int64(_elapsed_time.count()));
-
         auto current_elapsed_time = _elapsed_time + std::chrono::duration_cast<std::chrono::milliseconds>(now - _start_time);
         return static_cast<uint32_t>(current_elapsed_time.count());
     }
@@ -198,6 +195,9 @@ void Stopwatch::ping()
 
     auto now = std::chrono::steady_clock::now();
     auto time_since_last_ping = std::chrono::duration_cast<std::chrono::milliseconds>(now - _last_ping_time);
+
+    // UtilityFunctions::print(String("Time since last ping: ") + String::num(time_since_last_ping.count()) + "ms");
+
     _last_ping_time = now;
 
     if (time_since_last_ping.count() > 10000)
