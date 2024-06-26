@@ -12,6 +12,10 @@ func _ready():
 	$TabContainer.current_tab = 0
 	
 	# theming
+	# TODO use is_part_of_edited_scene() once it's exposed
+	if not get_tree().edited_scene_root == null and get_tree().edited_scene_root in [self, owner]:
+		return
+	
 	if scroll_container.has_theme_stylebox_override("panel"):
 		scroll_container.remove_theme_stylebox_override("panel")
 	
