@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/calendar_ui.gd" id="2_o3enq"]
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/settings_ui.gd" id="3_2k87h"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_47jbh"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3vo3k"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -68,7 +68,7 @@ text = "Starting date: 1970-01-01"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_47jbh")
+theme_override_styles/panel = SubResource("StyleBoxFlat_3vo3k")
 
 [node name="MarginContainer" type="MarginContainer" parent="TabContainer/Calendar/VBoxContainer/ScrollContainer"]
 layout_mode = 2

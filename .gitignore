@@ -2,3 +2,4 @@
 .godot/
 /addons/worktime_stopwatch_saved_data.res
 /addons/worktime_stopwatch_settings.cfg
+.sconsign.dblite
