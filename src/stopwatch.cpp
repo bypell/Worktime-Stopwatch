@@ -107,7 +107,7 @@ uint32_t Stopwatch::set_current_time(uint32_t time)
 void Stopwatch::refresh_check_current_window()
 {
 
-    // if both checks are false, return
+    // if both are false, return
     if (!_check_godot_window_foreground && !_check_other_windows_foreground)
     {
         return;
