@@ -7,7 +7,7 @@ const FILE_PATH := "res://addons/worktime_stopwatch_settings.cfg"
 const DEFAULT_CURRENT_DAILY_WORK_TIME_MINUTES := 20.0
 const DEFAULT_GODOT_PROJECT_WINDOW := true
 const DEFAULT_OTHER_WINDOWS := true
-const DEFAULT_OTHER_WINDOWS_KEYWORDS := "Blender, Krita, Paint, Aseprite, LMMS, Audacity, FL Studio"
+const DEFAULT_OTHER_WINDOWS_KEYWORDS := "Blender, Krita, ArmorPaint, Aseprite, LMMS, Audacity, FL Studio"
 
 var config : ConfigFile
 
