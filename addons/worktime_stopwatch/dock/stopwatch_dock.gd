@@ -96,7 +96,6 @@ func _reset_accepted():
 	_stopwatch_status = StopwatchStatuses.RESET
 	start_pause_button.icon = start_icon
 	reset_button.disabled = true
-	set_process(false)
 	
 	_stopwatch.reset()
 	_refresh_elapsed_time_label()
