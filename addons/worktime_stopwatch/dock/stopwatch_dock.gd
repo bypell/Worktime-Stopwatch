@@ -140,7 +140,7 @@ func settings_updated(settings: Object):
 	_stopwatch.set_check_other_windows_foreground(settings.other_windows)
 	
 	var keywords: Array[String] = []
-	for k in settings.other_windows_keywords.split(",", true):
+	for k in settings.other_windows_keywords.split(",", false):
 		keywords.append(k.strip_edges())
 	
 	_stopwatch.set_other_windows_keywords(keywords)

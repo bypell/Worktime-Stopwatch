@@ -1,2 +1,4 @@
 # Godot 4+ specific ignores
 .godot/
+/addons/worktime_stopwatch_saved_data.res
+/addons/worktime_stopwatch_settings.cfg

@@ -73,6 +73,9 @@ uint32_t Stopwatch::get_current_time()
             return static_cast<uint32_t>(_elapsed_time.count());
         }
 
+        // convert elapsed time to godot string and print
+        UtilityFunctions::print(String::num_int64(_elapsed_time.count()));
+
         auto current_elapsed_time = _elapsed_time + std::chrono::duration_cast<std::chrono::milliseconds>(now - _start_time);
         return static_cast<uint32_t>(current_elapsed_time.count());
     }
@@ -82,15 +85,23 @@ uint32_t Stopwatch::get_current_time()
     }
 }
 
-// Set the current time in milliseconds. Also stops the stopwatch beforehand.
+// Set the current time in milliseconds.
 uint32_t Stopwatch::set_current_time(uint32_t time)
 {
-    if (_is_running)
+    bool was_running = _is_running;
+
+    if (was_running)
     {
         stop();
     }
 
     _elapsed_time = std::chrono::milliseconds{time};
+
+    if (was_running)
+    {
+        start();
+    }
+
     return time;
 }
 

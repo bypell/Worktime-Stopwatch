@@ -15,9 +15,6 @@ var settings : Object
 
 
 func _enter_tree() -> void:
-	# load data
-	_load_or_create_saved_data()
-	
 	# load settings and start listening to changes
 	settings = Settings.new()
 	if not FileAccess.file_exists(settings.FILE_PATH):
@@ -26,6 +23,9 @@ func _enter_tree() -> void:
 	else:
 		settings.load_settings()
 	settings.settings_updated.connect(_on_settings_updated)
+	
+	# load data
+	_load_or_create_saved_data()
 	
 	# instantiation of dock and config window
 	main_widget_instance = MainWidget.instantiate()
@@ -63,6 +63,9 @@ func _exit_tree():
 
 func _on_settings_updated():
 	main_widget_instance.settings_updated(settings)
+	saved_data_instance.current_day_data.target_work_time = settings.current_daily_work_time_minutes * 60000
+	
+	_refresh_stopwatch_widget()
 
 
 func _refresh_stopwatch_widget():
@@ -91,7 +94,7 @@ func _load_or_create_saved_data():
 		current_day_data.day_number = 1
 		current_day_data.date = current_date
 		current_day_data.work_time = 0
-		current_day_data.target_work_time = 1200000 # TODO: not hardcoded
+		current_day_data.target_work_time = settings.current_daily_work_time_minutes * 60000
 		
 		saved_data_instance.current_day_data = current_day_data
 
@@ -129,7 +132,7 @@ func _switch_to_new_day():
 			)
 	new_current_day_data.date = current_date
 	new_current_day_data.work_time = 0
-	new_current_day_data.target_work_time = 1200000 # TODO: not hardcoded
+	new_current_day_data.target_work_time = settings.current_daily_work_time_minutes * 60000
 	
 	saved_data_instance.current_day_data = new_current_day_data
 	#saved_data_instance.save_data()
