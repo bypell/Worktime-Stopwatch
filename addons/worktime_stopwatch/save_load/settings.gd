@@ -9,7 +9,7 @@ const DEFAULT_CURRENT_DAILY_WORK_TIME_MINUTES := 20.0
 const DEFAULT_GODOT_PROJECT_WINDOW := true
 const DEFAULT_OTHER_WINDOWS := true
 const DEFAULT_OTHER_WINDOWS_KEYWORDS := "Blender, Krita, ArmorPaint, Aseprite, LMMS, Audacity, FL Studio"
-const DEFAULT_CONTINUOUS_DATE_CHECK := true
+const DEFAULT_CONTINUOUS_DATE_CHECK := false
 
 var config : ConfigFile
 
