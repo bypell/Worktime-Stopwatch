@@ -7,3 +7,9 @@ src/*.obj
 .sconsign.dblite
 /addons/worktime_stopwatch_saved_data.res
 /addons/worktime_stopwatch_settings.cfg
+/addons/worktime_stopwatch/bin/*.so*
+/addons/worktime_stopwatch/bin/*.dll
+/addons/worktime_stopwatch/bin/*.ilk
+/addons/worktime_stopwatch/bin/*.exp
+/addons/worktime_stopwatch/bin/*.lib
+/addons/worktime_stopwatch/bin/*.dylib
