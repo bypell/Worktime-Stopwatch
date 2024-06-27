@@ -134,6 +134,7 @@ tooltip_text = "Minimum daily work time. One decimal place is allowed (ex: 10.5 
 max_value = 1439.0
 step = 0.1
 update_on_text_changed = true
+custom_arrow_step = 1.0
 
 [node name="MinutesLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/MinimumWorkTime/HBoxContainer"]
 layout_mode = 2
@@ -159,7 +160,8 @@ layout_mode = 2
 
 [node name="FocusedWindowLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
 layout_mode = 2
-tooltip_text = "These checkboxes let you decide when the stopwatch should automatically block itself. The verifications are done on the currently focused window."
+tooltip_text = "These checkboxes let you decide when the stopwatch should automatically block itself. The verifications are done on the currently focused window.
+This feature is Windows-only."
 mouse_filter = 1
 text = "Limit activity to:"
 
