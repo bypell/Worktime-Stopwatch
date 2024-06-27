@@ -6,7 +6,7 @@
 #endif
 
 #include <chrono>
-
+#include <string>
 #include <godot_cpp/classes/object.hpp>
 
 namespace godot

@@ -76,24 +76,36 @@ func force_reset_current_work_time():
 	_reset_accepted()
 
 
+func auto_start_stopwatch():
+	_start_stopwatch()
+
+
 func _start_pause_button_pressed():
 	match _stopwatch_status:
 		StopwatchStatuses.RESET, StopwatchStatuses.STOPPED:
 			# if previously stopped or reset, should start counting
-			_stopwatch_status = StopwatchStatuses.COUNTING
-			start_pause_button.icon = pause_icon
-			reset_button.disabled = false
-			started_stopwatch.emit()
-			set_process(true)
-			_stopwatch.start()
+			_start_stopwatch()
 		StopwatchStatuses.COUNTING:
 			# if previously counting, should pause
-			_stopwatch_status = StopwatchStatuses.STOPPED
-			start_pause_button.icon = start_icon
-			reset_button.disabled = false
-			stopped_stopwatch.emit()
-			set_process(false)
-			_stopwatch.stop()
+			_stop_stopwatch()
+
+
+func _start_stopwatch():
+	_stopwatch_status = StopwatchStatuses.COUNTING
+	start_pause_button.icon = pause_icon
+	reset_button.disabled = false
+	started_stopwatch.emit()
+	set_process(true)
+	_stopwatch.start()
+
+
+func _stop_stopwatch():
+	_stopwatch_status = StopwatchStatuses.STOPPED
+	start_pause_button.icon = start_icon
+	reset_button.disabled = false
+	stopped_stopwatch.emit()
+	set_process(false)
+	_stopwatch.stop()
 
 
 func _reset_button_pressed():

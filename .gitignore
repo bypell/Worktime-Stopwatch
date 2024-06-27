@@ -1,5 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
+.vscode
+*.pdb
+*.os
+src/*.obj
+.sconsign.dblite
 /addons/worktime_stopwatch_saved_data.res
 /addons/worktime_stopwatch_settings.cfg
-.sconsign.dblite

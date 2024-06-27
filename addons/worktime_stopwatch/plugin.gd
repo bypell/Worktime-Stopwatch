@@ -1,6 +1,8 @@
 @tool
 extends EditorPlugin
 
+const CONTINUOUS_DATE_CHECK_DELAY := 5.0
+
 const SavedData = preload("res://addons/worktime_stopwatch/save_load/saved_data.gd")
 const DayData = preload("res://addons/worktime_stopwatch/calendar/day_data.gd")
 
@@ -13,6 +15,14 @@ var main_dock_instance: Control
 var config_window_instance: Window
 var settings: Object
 
+var _continuous_date_check_cooldown := CONTINUOUS_DATE_CHECK_DELAY
+var _continuous_date_check := false:
+	set(value):
+		_continuous_date_check = value
+		set_process(value) # TODO should remove if more member variables related to a setting need process
+		if value:
+			_continuous_date_check_cooldown = CONTINUOUS_DATE_CHECK_DELAY
+
 
 func _enter_tree() -> void:
 	# load settings and start listening to changes
@@ -22,6 +32,7 @@ func _enter_tree() -> void:
 		settings.save()
 	else:
 		settings.load_settings()
+	_continuous_date_check = settings.continuous_date_check
 	settings.settings_updated.connect(_on_settings_updated)
 	
 	# load data
@@ -58,9 +69,13 @@ func _enter_tree() -> void:
 	_initialize_stopwatch_widget()
 	_refresh_config_window()
 	main_dock_instance.settings_updated(settings)
+	
+	# auto start stopwatch if it was set in the settings
+	if settings.auto_start_stopwatch_on_load:
+		main_dock_instance.auto_start_stopwatch()
 
 
-func _exit_tree():
+func _exit_tree() -> void:
 	_save_current_work_time()
 	
 	remove_control_from_docks(main_dock_instance)
@@ -70,7 +85,18 @@ func _exit_tree():
 	settings.free()
 
 
+func _process(delta: float) -> void:
+	if _continuous_date_check:
+		_continuous_date_check_cooldown -= delta
+		if _continuous_date_check_cooldown <= 0.0:
+			if _is_current_date_newer_than_saved_current_date():
+				_save_current_work_time()
+			_continuous_date_check_cooldown = CONTINUOUS_DATE_CHECK_DELAY
+
+
 func _on_settings_updated():
+	_continuous_date_check = settings.continuous_date_check
+	
 	main_dock_instance.settings_updated(settings)
 	saved_data_instance.current_day_data.target_work_time = settings.current_daily_work_time_minutes * 60000
 	
@@ -81,8 +107,8 @@ func _initialize_stopwatch_widget():
 	main_dock_instance.initialize_displayed_info(saved_data_instance)
 
 
-func _refresh_stopwatch_widget():
-	main_dock_instance.update_displayed_info(saved_data_instance)
+func _refresh_stopwatch_widget(update_displayed_current_work_time := false):
+	main_dock_instance.update_displayed_info(saved_data_instance, update_displayed_current_work_time)
 
 
 func _refresh_config_window():
@@ -156,14 +182,13 @@ func _switch_to_new_day():
 
 
 # Saves current progress and if the date is no longer the same, makes the necessary calls to switch to a new day
-# TODO: separate both actions into different functions
 func _save_current_work_time():
 	saved_data_instance.current_day_data.work_time = main_dock_instance.get_elapsed_time()
 	saved_data_instance.save_data()
 	
 	if _is_current_date_newer_than_saved_current_date():
 		_switch_to_new_day()
-		_refresh_stopwatch_widget()
+		_refresh_stopwatch_widget(true)
 		_refresh_config_window()
 
 

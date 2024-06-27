@@ -106,7 +106,6 @@ uint32_t Stopwatch::set_current_time(uint32_t time)
 // Checks the current window title and blocks the stopwatch if necessary
 void Stopwatch::refresh_check_current_window()
 {
-
     // if both are false, return
     if (!_check_godot_window_foreground && !_check_other_windows_foreground)
     {
@@ -138,6 +137,8 @@ void Stopwatch::refresh_check_current_window()
         }
     }
 
+    // THE FOLLOWING CHUNK OF CODE IS WINDOWS-ONLY (this looks so ugly lmao)
+#ifdef _WIN32
     // other windows check
     std::string title_str = _get_active_window_title();
     if ((should_block || !_check_godot_window_foreground) && _check_other_windows_foreground)
@@ -162,6 +163,7 @@ void Stopwatch::refresh_check_current_window()
             }
         }
     }
+#endif
 
     // UtilityFunctions::print("--------------------");
 
@@ -225,7 +227,8 @@ void Stopwatch::set_other_windows_keywords(const TypedArray<String> &titles)
     _other_windows_keywords = titles;
 }
 
-// Function to get the title of the foreground  window
+#ifdef _WIN32
+// Function to get the title of the foreground  window (Windows-only, right now)
 std::string Stopwatch::_get_active_window_title()
 {
     HWND hwnd = GetForegroundWindow(); // get handle of currently active window
@@ -239,3 +242,4 @@ std::string Stopwatch::_get_active_window_title()
     WideCharToMultiByte(CP_UTF8, 0, wnd_title, -1, &strTo[0], size_needed, NULL, NULL);
     return strTo;
 }
+#endif

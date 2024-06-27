@@ -45,7 +45,9 @@ func _ready() -> void:
 		prefix = "+"
 	elif diff < 0:
 		prefix = "-"
-	time_difference_label.text = prefix + str(_format_time(snappedf(diff, 1000)))
+	
+	var displayed_diff := float(int(time / 1000) - int(target_time / 1000)) * 1000
+	time_difference_label.text = prefix + str(_format_time(displayed_diff))
 	
 	if prefix == "+":
 		time_difference_label.add_theme_color_override("font_color", success_color)
@@ -71,7 +73,7 @@ func _set_tooltip():
 func _format_time(milliseconds : float) -> String:
 	var t := abs(milliseconds)
 	var total_seconds = int(t) / 1000
-	var hours = int(total_seconds / 3600)
-	var minutes = int(total_seconds / 60) % 60
-	var seconds = int(total_seconds) % 60
+	var hours = total_seconds / 3600
+	var minutes = (total_seconds / 60) % 60
+	var seconds = total_seconds % 60
 	return "%02d:%02d:%02d" % [hours, minutes, seconds]

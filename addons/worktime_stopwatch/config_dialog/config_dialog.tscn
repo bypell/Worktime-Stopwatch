@@ -41,9 +41,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+current_tab = 1
 
 [node name="Calendar" type="MarginContainer" parent="TabContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 theme_override_constants/margin_left = 10
@@ -95,7 +97,6 @@ columns = 7
 
 [node name="Settings" type="MarginContainer" parent="TabContainer"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 theme_override_constants/margin_left = 10
@@ -116,51 +117,79 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="MinimumWorkTime" type="VBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/MinimumWorkTime"]
 layout_mode = 2
 
-[node name="CurrentWorktimeLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="CurrentWorktimeLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/MinimumWorkTime/HBoxContainer"]
 layout_mode = 2
 text = "Current minimum daily work time: "
 
-[node name="DailyWorkTimeSpinBox" type="SpinBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="DailyWorkTimeSpinBox" type="SpinBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/MinimumWorkTime/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Minimum daily work time. One decimal place is allowed (ex: 10.5 for 10m30s)"
 max_value = 1439.0
 step = 0.1
 update_on_text_changed = true
-custom_arrow_step = 1.0
 
-[node name="MinutesLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="MinutesLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/MinimumWorkTime/HBoxContainer"]
 layout_mode = 2
 text = "minutes"
+
+[node name="Misc" type="VBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AutoStartCheckbox" type="CheckBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/Misc"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "The stopwatch will start counting as soon as you open your project (or the plugin is enabled)."
+text = "Auto start stopwatch on plugin load"
+
+[node name="ContinuousDateCheckCheckBox" type="CheckBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/Misc"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "The plugin will check the current date every 5 seconds instead of only when you start/stop the stopwatch or open/close the project."
+button_pressed = true
+text = "Continuous date check"
 
 [node name="FocusedWindow" type="VBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="FocusedWindowLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
 layout_mode = 2
+tooltip_text = "These checkboxes let you decide when the stopwatch should automatically block itself. The verifications are done on the currently focused window."
+mouse_filter = 1
 text = "Limit activity to:"
 
-[node name="FocusedGodotCheckBox" type="CheckBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/MarginContainer"]
+layout_mode = 2
+
+[node name="FocusedGodotCheckBox" type="CheckBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Stopwatch activity is limited to (at least) the godot project window."
 button_pressed = true
 text = "Godot project window"
 
-[node name="FocusedOtherCheckBox" type="CheckBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
+[node name="FocusedOtherCheckBox" type="CheckBox" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Stopwatch activity is limited to (at least) other windows whose title contains one of the given keywords."
 button_pressed = true
 text = "Window with one of these keywords in its title:"
 
-[node name="FocusedOtherTextEdit" type="TextEdit" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
+[node name="FocusedOtherTextEdit" type="TextEdit" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+tooltip_text = "Comma separated, case insensitive list of keywords that a focused window's title can contain to be considered \"whitelisted\" and to not block the stopwatch."
 virtual_keyboard_enabled = false
 wrap_mode = 1
 
@@ -194,10 +223,12 @@ dialog_text = "Reset settings to the default values?"
 
 [connection signal="pressed" from="TabContainer/Calendar/VBoxContainer/HBoxContainer/ResetProgressButton" to="." method="_on_reset_progress_button_pressed"]
 [connection signal="confirmed" from="TabContainer/Calendar/VBoxContainer/HBoxContainer/ResetProgressButton/ResetProgressConfirmationDialog" to="." method="_on_reset_progress_confirmation_dialog_confirmed"]
-[connection signal="value_changed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/HBoxContainer/DailyWorkTimeSpinBox" to="TabContainer/Settings" method="_setting_changed" unbinds=1]
-[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/FocusedGodotCheckBox" to="TabContainer/Settings" method="_setting_changed"]
-[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/FocusedOtherCheckBox" to="TabContainer/Settings" method="_setting_changed"]
-[connection signal="text_changed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/FocusedOtherTextEdit" to="TabContainer/Settings" method="_setting_changed"]
+[connection signal="value_changed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/MinimumWorkTime/HBoxContainer/DailyWorkTimeSpinBox" to="TabContainer/Settings" method="_setting_changed" unbinds=1]
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/Misc/AutoStartCheckbox" to="TabContainer/Settings" method="_setting_changed"]
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/Misc/ContinuousDateCheckCheckBox" to="TabContainer/Settings" method="_setting_changed"]
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/MarginContainer/VBoxContainer/FocusedGodotCheckBox" to="TabContainer/Settings" method="_setting_changed"]
+[connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/MarginContainer/VBoxContainer/FocusedOtherCheckBox" to="TabContainer/Settings" method="_setting_changed"]
+[connection signal="text_changed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/MarginContainer/VBoxContainer/FocusedOtherTextEdit" to="TabContainer/Settings" method="_setting_changed"]
 [connection signal="pressed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/SaveButton" to="TabContainer/Settings" method="_read_ui_and_save_settings"]
 [connection signal="pressed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/CancelButton" to="TabContainer/Settings" method="_set_ui_to_settings"]
 [connection signal="pressed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/ResetButton" to="TabContainer/Settings" method="_reset_settings_requested"]
