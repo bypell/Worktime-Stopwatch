@@ -1,9 +1,12 @@
 name: Builds
 
-on: [push, pull_request]
+on: 
+  workflow_dispatch:
+  push:
+  pull_request:
 
-# concurrency: 
-#   group: ci-${{github.actor}}-${{github.head_ref || github.run_number}}-${{github.ref}}-macos
+# concurrency:
+#   group: "${{ github.workflow }}-${{ github.ref_name }}"
 #   cancel-in-progress: true
 
 jobs:
@@ -53,7 +56,7 @@ jobs:
           cp LICENSE addons/worktime_stopwatch/LICENSE
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
@@ -92,7 +95,7 @@ jobs:
         run: |
           Remove-Item addons/worktime_stopwatch/bin/* -Include *.exp,*.lib,*.pdb -Force
 
-      - name: Upload artifact
+      - name: Upload artifact (addons folder)
         uses: actions/upload-artifact@v4
         with:
           name: worktime_stopwatch_plugin-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.arch }}
