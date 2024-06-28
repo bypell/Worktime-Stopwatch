@@ -3,8 +3,6 @@ run-name: Builds
 
 on: 
   workflow_dispatch:
-  push:
-  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}
@@ -37,7 +35,7 @@ jobs:
         with:
           submodules: recursive
       
-      - name: Move LICENSE file to addons folder
+      - name: Copy LICENSE file to addons folder
         run: |
           cp LICENSE addons/worktime_stopwatch/LICENSE
 
