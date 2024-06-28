@@ -37,7 +37,7 @@ jobs:
         with:
           submodules: recursive
       
-      - name: Move LICENSE file to /addons
+      - name: Move LICENSE file to addons folder
         run: |
           cp LICENSE addons/worktime_stopwatch/LICENSE
 
