@@ -1,4 +1,5 @@
 name: Builds
+run-name: Builds
 
 on: 
   workflow_dispatch:
