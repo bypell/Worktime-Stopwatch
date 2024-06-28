@@ -14,7 +14,6 @@ jobs:
     runs-on:  ${{matrix.os}}
     name: ${{matrix.name}}
     strategy:
-      fail-fast: false
       matrix:
         include:
           - identifier: windows-debug
@@ -23,12 +22,6 @@ jobs:
             target: template_debug
             platform: windows
             arch: x86_64
-          # - identifier: windows-release
-          #   os: windows-latest
-          #   name: 🏁 Windows Release
-          #   target: template_release
-          #   platform: windows
-          #   arch: x86_64
           - identifier: linux-debug
             os: ubuntu-latest
             name: 🐧 Linux Debug
@@ -36,14 +29,6 @@ jobs:
             target: template_debug
             platform: linux
             arch: x86_64
-          # - identifier: linux-release
-          #   os: ubuntu-latest
-          #   name: 🐧 Linux Release
-          #   runner: ubuntu-20.04
-          #   target: template_release
-          #   platform: linux
-          #   arch: x86_64
-
     steps:
 
       - name: Checkout project
