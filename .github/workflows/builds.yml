@@ -47,7 +47,7 @@ jobs:
     steps:
 
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@4
         with:
           submodules: recursive
 
@@ -94,23 +94,17 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}
-          path: 'addons/worktime_stopwatch/bin/'
-
-      # - name: Archive Release
-      #   if: success() && github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
-      #   uses: thedoctor0/zip-release@0.7.1
-      #   with:
-      #     type: 'zip'
-      #     filename: '${{ env.LIBNAME }}.${{ matrix.platform }}.${{ matrix.target }}.${{ matrix.arch }}.zip'
-      #     path: 'worktime_stopwatch/bin/'
-
-      # - name: Create and upload asset
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     allowUpdates: true
-      #     artifacts: "${{ env.LIBNAME }}.${{ matrix.platform }}.${{ matrix.target }}.${{ matrix.arch }}.zip"
-      #     omitNameDuringUpdate: true
-      #     omitBodyDuringUpdate: true
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #   if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+          name: worktime_stopwatch-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.arch }}
+          path: |
+            ${{ github.workspace }}/addons/worktime_stopwatch/bin/**
+        
+  merge:
+    runs-on: ubuntu-20.04
+    needs: build
+    steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: worktime_stopwatch
+          pattern: worktime_stopwatch-*
+          delete-merged: true
