@@ -32,6 +32,8 @@ var _refresh_check_window_cooldown := REFRESH_CHECK_WINDOW_DELAY
 
 
 func _ready():
+	set_process(false)
+	
 	# apply icons
 	start_pause_button.icon = start_icon
 	reset_button.icon = reset_icon
@@ -70,6 +72,10 @@ func _process(delta):
 		_refresh_elapsed_time_label()
 
 
+func force_reset_current_work_time():
+	_reset_accepted()
+
+
 func _start_pause_button_pressed():
 	match _stopwatch_status:
 		StopwatchStatuses.RESET, StopwatchStatuses.STOPPED:
@@ -78,6 +84,7 @@ func _start_pause_button_pressed():
 			start_pause_button.icon = pause_icon
 			reset_button.disabled = false
 			started_stopwatch.emit()
+			set_process(true)
 			_stopwatch.start()
 		StopwatchStatuses.COUNTING:
 			# if previously counting, should pause
@@ -85,6 +92,7 @@ func _start_pause_button_pressed():
 			start_pause_button.icon = start_icon
 			reset_button.disabled = false
 			stopped_stopwatch.emit()
+			set_process(false)
 			_stopwatch.stop()
 
 
@@ -108,27 +116,32 @@ func _refresh_elapsed_time_label():
 
 
 func _format_time(milliseconds : float) -> String:
-	var total_seconds = int(milliseconds) / 1000
+	var t := abs(milliseconds)
+	var total_seconds = int(t) / 1000
 	var hours = int(total_seconds / 3600)
 	var minutes = int(total_seconds / 60) % 60
 	var seconds = int(total_seconds) % 60
 	return "%02d:%02d:%02d" % [hours, minutes, seconds]
 
 
+func initialize_displayed_info(saved_data_instance):
+	update_displayed_info(saved_data_instance, true)
+	if _stopwatch.get_current_time() > 0.0:
+		_stopwatch_status = StopwatchStatuses.STOPPED
+		reset_button.disabled = false
+
+
 # Updates the info displayed in the dock using the given saved data and the stopwatch's current state
-func update_displayed_info(saved_data_instance):
+func update_displayed_info(saved_data_instance, update_work_time = false):
 	var day_number = saved_data_instance.current_day_data.day_number
 	var work_time = saved_data_instance.current_day_data.work_time
 	var target_time = saved_data_instance.current_day_data.target_work_time
 	
 	current_day_button.text = "Day " + str(day_number)
 	target_time_label.text = _format_time(float(target_time))
-	_stopwatch.set_current_time(work_time)
-	elapsed_time_label.text = _format_time(float(work_time))
-	
-	if _stopwatch.get_current_time() > 0.0:
-		_stopwatch_status = StopwatchStatuses.STOPPED
-		reset_button.disabled = false
+	if update_work_time:
+		_stopwatch.set_current_time(work_time)
+		elapsed_time_label.text = _format_time(float(work_time))
 
 
 func get_elapsed_time():

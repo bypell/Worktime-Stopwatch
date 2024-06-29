@@ -1,6 +1,8 @@
 @tool
 extends Window
 
+signal progress_reset_accepted
+
 @onready var scroll_container : ScrollContainer = %ScrollContainer
 @onready var calendar_ui: MarginContainer = %Calendar
 @onready var settings_ui: MarginContainer = %Settings
@@ -28,3 +30,11 @@ func update_displayed_info(saved_data_instance):
 
 func setup_settings_ui(settings: Object):
 	settings_ui.setup(settings)
+
+
+func _on_reset_progress_button_pressed() -> void:
+	%ResetProgressConfirmationDialog.popup_centered()
+
+
+func _on_reset_progress_confirmation_dialog_confirmed() -> void:
+	progress_reset_accepted.emit()

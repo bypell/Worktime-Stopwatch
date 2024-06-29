@@ -26,6 +26,7 @@ void Stopwatch::start()
 {
     if (!_is_running)
     {
+        _last_ping_time = std::chrono::steady_clock::now();
         _is_blocked = false;
         _start_time = std::chrono::steady_clock::now();
         _is_running = true;
@@ -200,7 +201,7 @@ void Stopwatch::ping()
 
     _last_ping_time = now;
 
-    if (time_since_last_ping.count() > 10000)
+    if (time_since_last_ping.count() > 30000)
     {
         _start_time += time_since_last_ping;
     }

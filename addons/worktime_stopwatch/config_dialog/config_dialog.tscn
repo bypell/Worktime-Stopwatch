@@ -1,11 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://nntvl76rwuvf"]
+[gd_scene load_steps=5 format=3 uid="uid://nntvl76rwuvf"]
 
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/config_dialog.gd" id="1_4yrt7"]
-[ext_resource type="StyleBox" uid="uid://d0dqpg8jmfihg" path="res://addons/worktime_stopwatch/theme_override/focus_stylebox.tres" id="2_fgecd"]
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/calendar_ui.gd" id="2_o3enq"]
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/settings_ui.gd" id="3_2k87h"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lchth"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0bsyg"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -42,7 +41,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/tab_focus = ExtResource("2_fgecd")
 
 [node name="Calendar" type="MarginContainer" parent="TabContainer"]
 unique_name_in_owner = true
@@ -66,11 +64,22 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Starting date: 1970-01-01"
 
+[node name="ResetProgressButton" type="Button" parent="TabContainer/Calendar/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset"
+
+[node name="ResetProgressConfirmationDialog" type="ConfirmationDialog" parent="TabContainer/Calendar/VBoxContainer/HBoxContainer/ResetProgressButton"]
+unique_name_in_owner = true
+position = Vector2i(0, 36)
+size = Vector2i(403, 100)
+dialog_text = "Reset whole progression? You will return to Day 1. Current work time will also be reset."
+
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Calendar/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_lchth")
+theme_override_styles/panel = SubResource("StyleBoxFlat_0bsyg")
 
 [node name="MarginContainer" type="MarginContainer" parent="TabContainer/Calendar/VBoxContainer/ScrollContainer"]
 layout_mode = 2
@@ -183,6 +192,8 @@ position = Vector2i(0, 36)
 size = Vector2i(295, 100)
 dialog_text = "Reset settings to the default values?"
 
+[connection signal="pressed" from="TabContainer/Calendar/VBoxContainer/HBoxContainer/ResetProgressButton" to="." method="_on_reset_progress_button_pressed"]
+[connection signal="confirmed" from="TabContainer/Calendar/VBoxContainer/HBoxContainer/ResetProgressButton/ResetProgressConfirmationDialog" to="." method="_on_reset_progress_confirmation_dialog_confirmed"]
 [connection signal="value_changed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/HBoxContainer/DailyWorkTimeSpinBox" to="TabContainer/Settings" method="_setting_changed" unbinds=1]
 [connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/FocusedGodotCheckBox" to="TabContainer/Settings" method="_setting_changed"]
 [connection signal="pressed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow/FocusedOtherCheckBox" to="TabContainer/Settings" method="_setting_changed"]

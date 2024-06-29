@@ -8,10 +8,10 @@ const MainWidget := preload("res://addons/worktime_stopwatch/dock/stopwatch_dock
 const ConfigDialog := preload("res://addons/worktime_stopwatch/config_dialog/config_dialog.tscn")
 const Settings := preload("res://addons/worktime_stopwatch/save_load/settings.gd")
 
-var saved_data_instance
-var main_widget_instance : Control
-var config_window_instance : Window
-var settings : Object
+var saved_data_instance: Resource
+var main_dock_instance: Control
+var config_window_instance: Window
+var settings: Object
 
 
 func _enter_tree() -> void:
@@ -28,14 +28,23 @@ func _enter_tree() -> void:
 	_load_or_create_saved_data()
 	
 	# instantiation of dock and config window
-	main_widget_instance = MainWidget.instantiate()
+	main_dock_instance = MainWidget.instantiate()
 	config_window_instance = ConfigDialog.instantiate()
 	
 	# connecting widget signals
-	main_widget_instance.settings_menu_opening_requested.connect(func(): config_window_instance.popup_centered())
-	main_widget_instance.stopped_stopwatch.connect(_save_current_work_time)
-	main_widget_instance.reset_stopwatch.connect(_save_current_work_time)
-	main_widget_instance.started_stopwatch.connect(_save_current_work_time)
+	main_dock_instance.settings_menu_opening_requested.connect(func(): config_window_instance.popup_centered())
+	main_dock_instance.stopped_stopwatch.connect(_save_current_work_time)
+	main_dock_instance.reset_stopwatch.connect(_save_current_work_time)
+	main_dock_instance.started_stopwatch.connect(_save_current_work_time)
+	
+	# connecting config window signal
+	config_window_instance.progress_reset_accepted.connect(
+			func():
+				_create_and_set_new_saved_data_object()
+				main_dock_instance.force_reset_current_work_time()
+				_refresh_stopwatch_widget()
+				_refresh_config_window()
+	)
 	
 	# setting up settings ui
 	config_window_instance.setup_settings_ui.bind(settings).call_deferred()
@@ -43,41 +52,44 @@ func _enter_tree() -> void:
 	# adding dock and windows
 	config_window_instance.hide()
 	EditorInterface.get_base_control().add_child(config_window_instance)
-	_add_widget_as_dock(main_widget_instance)
+	_add_widget_as_dock(main_dock_instance)
 	
 	# update widget displays with data
-	_refresh_stopwatch_widget()
-	_refresh_calendar_dialog()
-	main_widget_instance.settings_updated(settings)
+	_initialize_stopwatch_widget()
+	_refresh_config_window()
+	main_dock_instance.settings_updated(settings)
 
 
 func _exit_tree():
 	_save_current_work_time()
 	
-	remove_control_from_docks(main_widget_instance)
-	main_widget_instance.queue_free()
+	remove_control_from_docks(main_dock_instance)
+	main_dock_instance.queue_free()
 	config_window_instance.queue_free()
 	
 	settings.free()
 
 
 func _on_settings_updated():
-	main_widget_instance.settings_updated(settings)
+	main_dock_instance.settings_updated(settings)
 	saved_data_instance.current_day_data.target_work_time = settings.current_daily_work_time_minutes * 60000
 	
 	_refresh_stopwatch_widget()
 
 
+func _initialize_stopwatch_widget():
+	main_dock_instance.initialize_displayed_info(saved_data_instance)
+
+
 func _refresh_stopwatch_widget():
-	main_widget_instance.update_displayed_info(saved_data_instance)
+	main_dock_instance.update_displayed_info(saved_data_instance)
 
 
-func _refresh_calendar_dialog():
+func _refresh_config_window():
 	config_window_instance.update_displayed_info(saved_data_instance)
 
 
 func _load_or_create_saved_data():
-	var current_date = Time.get_date_dict_from_system()
 	if SavedData.verify_saved_data_exists():
 		# if data file exists, we load it
 		saved_data_instance = SavedData.load_saved_data()
@@ -87,16 +99,21 @@ func _load_or_create_saved_data():
 			_switch_to_new_day()
 	else:
 		# if data file doesn't exist, we create one
-		saved_data_instance = SavedData.new()
-		saved_data_instance.starting_date = current_date
-		
-		var current_day_data = DayData.new()
-		current_day_data.day_number = 1
-		current_day_data.date = current_date
-		current_day_data.work_time = 0
-		current_day_data.target_work_time = settings.current_daily_work_time_minutes * 60000
-		
-		saved_data_instance.current_day_data = current_day_data
+		_create_and_set_new_saved_data_object()
+
+
+func _create_and_set_new_saved_data_object():
+	var current_date: Dictionary = Time.get_date_dict_from_system()
+	saved_data_instance = SavedData.new()
+	saved_data_instance.starting_date = current_date
+	
+	var current_day_data = DayData.new()
+	current_day_data.day_number = 1
+	current_day_data.date = current_date
+	current_day_data.work_time = 0
+	current_day_data.target_work_time = settings.current_daily_work_time_minutes * 60000
+	
+	saved_data_instance.current_day_data = current_day_data
 
 
 func _add_widget_as_dock(widget_instance):
@@ -141,13 +158,13 @@ func _switch_to_new_day():
 # Saves current progress and if the date is no longer the same, makes the necessary calls to switch to a new day
 # TODO: separate both actions into different functions
 func _save_current_work_time():
-	saved_data_instance.current_day_data.work_time = main_widget_instance.get_elapsed_time()
+	saved_data_instance.current_day_data.work_time = main_dock_instance.get_elapsed_time()
 	saved_data_instance.save_data()
 	
 	if _is_current_date_newer_than_saved_current_date():
 		_switch_to_new_day()
 		_refresh_stopwatch_widget()
-		_refresh_calendar_dialog()
+		_refresh_config_window()
 
 
 # Gets the difference in days between two date dictionaries

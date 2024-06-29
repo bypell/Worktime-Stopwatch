@@ -45,7 +45,7 @@ func _ready() -> void:
 		prefix = "+"
 	elif diff < 0:
 		prefix = "-"
-	time_difference_label.text = prefix + str(_format_time(diff))
+	time_difference_label.text = prefix + str(_format_time(snappedf(diff, 1000)))
 	
 	if prefix == "+":
 		time_difference_label.add_theme_color_override("font_color", success_color)
