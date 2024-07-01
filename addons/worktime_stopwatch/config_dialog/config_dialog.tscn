@@ -160,7 +160,7 @@ layout_mode = 2
 
 [node name="FocusedWindowLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
 layout_mode = 2
-tooltip_text = "These checkboxes let you decide when the stopwatch should automatically block itself. The verifications are done on the currently focused window.
+tooltip_text = "If the currently focused window doesn't correspond to any of the (checked) checkboxes below, the stopwatch will stop counting until you focus back on an allowed window.
 This feature is Windows-only."
 mouse_filter = 1
 text = "Limit activity to:"

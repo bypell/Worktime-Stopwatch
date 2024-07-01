@@ -4,7 +4,7 @@ extends EditorPlugin
 const CONTINUOUS_DATE_CHECK_DELAY := 5.0
 
 const SavedData = preload("res://addons/worktime_stopwatch/save_load/saved_data.gd")
-const DayData = preload("res://addons/worktime_stopwatch/calendar/day_data.gd")
+const DayData = preload("res://addons/worktime_stopwatch/config_dialog/calendar/day_data.gd")
 
 const MainWidget := preload("res://addons/worktime_stopwatch/dock/stopwatch_dock.tscn")
 const ConfigDialog := preload("res://addons/worktime_stopwatch/config_dialog/config_dialog.tscn")

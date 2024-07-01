@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bdq0j521aok4l"]
 
-[ext_resource type="Script" path="res://addons/worktime_stopwatch/calendar/day_box.gd" id="1_hs0jh"]
+[ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/calendar/day_box.gd" id="1_hs0jh"]
 
 [node name="DayBox" type="ColorRect"]
 custom_minimum_size = Vector2(70, 70)

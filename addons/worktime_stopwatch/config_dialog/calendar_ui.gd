@@ -1,7 +1,7 @@
 @tool
 extends Node
 
-const DayBox := preload("res://addons/worktime_stopwatch/calendar/day_box.tscn")
+const DayBox := preload("res://addons/worktime_stopwatch/config_dialog/calendar/day_box.tscn")
 
 var starting_date : Dictionary
 
