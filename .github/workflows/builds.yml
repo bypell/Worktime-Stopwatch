@@ -3,6 +3,7 @@ run-name: Builds
 
 on: 
   workflow_dispatch:
+  push:
 
 concurrency:
   group: ${{ github.workflow }}

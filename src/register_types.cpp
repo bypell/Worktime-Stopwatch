@@ -10,7 +10,7 @@ using namespace godot;
 
 void initialize_stopwatch_module(ModuleInitializationLevel p_level)
 {
-    if (p_level != MODULE_INITIALIZATION_LEVEL_EDITOR)
+    if (p_level != MODULE_INITIALIZATION_LEVEL_CORE)
     {
         return;
     }
@@ -20,7 +20,7 @@ void initialize_stopwatch_module(ModuleInitializationLevel p_level)
 
 void uninitialize_stopwatch_module(ModuleInitializationLevel p_level)
 {
-    if (p_level != MODULE_INITIALIZATION_LEVEL_EDITOR)
+    if (p_level != MODULE_INITIALIZATION_LEVEL_CORE)
     {
         return;
     }
@@ -35,7 +35,7 @@ extern "C"
 
         init_obj.register_initializer(initialize_stopwatch_module);
         init_obj.register_terminator(uninitialize_stopwatch_module);
-        init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_EDITOR);
+        init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_CORE);
 
         return init_obj.init();
     }

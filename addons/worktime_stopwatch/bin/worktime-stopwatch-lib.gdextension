@@ -7,3 +7,4 @@ compatibility_minimum = "4.2"
 
 windows.debug.x86_64 = "res://addons/worktime_stopwatch/bin/libworktime-stopwatch.windows.template_debug.x86_64.dll"
 linux.debug.x86_64 = "res://addons/worktime_stopwatch/bin/libworktime-stopwatch.linux.template_debug.x86_64.so"
+macos.debug = "res://bin/libgdexample.macos.template_debug.framework"
