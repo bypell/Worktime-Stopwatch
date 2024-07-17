@@ -72,20 +72,15 @@ func refresh_check_current_window():
 	
 	var should_block = false
 	
+	if not _focused_window_watcher:
+		_focused_window_watcher = FocusedWindowWatcher.new()
+	
 	# godot window check
 	if _check_godot_window_foreground:
-		var windows = DisplayServer.get_window_list()
-		for w in windows:
-			# check if focused
-			if DisplayServer.window_is_focused(w):
-				should_block = false
-				break
-			else:
-				should_block = true
+		should_block = not _focused_window_watcher.is_active_window_belonging_to_godot_project_process()
 	
-	# REMOVE FOLLOWING CODE IF YOU ARE ON MAC
 	# other windows check
-	var title = _get_active_window_title().to_lower()
+	var title = _focused_window_watcher.get_active_window_title().to_lower()
 	if (should_block or not _check_godot_window_foreground) and _check_other_windows_foreground:
 		for keyword: String in _other_windows_keywords:
 			keyword = keyword.to_lower()
@@ -130,9 +125,3 @@ func set_check_other_windows_foreground(enabled: bool):
 
 func set_other_windows_keywords(keywords: Array[String]):
 	_other_windows_keywords = keywords
-
-
-func _get_active_window_title() -> String:
-	if not _focused_window_watcher:
-		_focused_window_watcher = FocusedWindowWatcher.new()
-	return _focused_window_watcher.get_active_window_title()

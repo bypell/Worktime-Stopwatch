@@ -3,6 +3,7 @@
 #include <godot_cpp/classes/object.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/display_server.hpp>
+#include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
@@ -10,6 +11,23 @@ using namespace godot;
 void FocusedWindowWatcher::_bind_methods()
 {
     ClassDB::bind_method(D_METHOD("get_active_window_title"), &FocusedWindowWatcher::get_active_window_title);
+    ClassDB::bind_method(D_METHOD("is_active_window_belonging_to_godot_project_process"), &FocusedWindowWatcher::is_active_window_belonging_to_godot_project_process);
+}
+
+// Function to check if the foreground window's process id is the same as the current project's process id
+bool FocusedWindowWatcher::is_active_window_belonging_to_godot_project_process()
+{
+    // Windows implementation
+#ifdef _WIN32
+
+    DWORD dwForegroundProcessId;
+    GetWindowThreadProcessId(GetForegroundWindow(), &dwForegroundProcessId);
+    return dwForegroundProcessId == OS::get_singleton()->get_process_id();
+
+#endif
+    // Windows implementation end
+
+    return false;
 }
 
 // Function to get the title of the foreground window (Windows-only, right now)
@@ -30,6 +48,7 @@ String FocusedWindowWatcher::get_active_window_title()
     return String(strTo.c_str());
 
 #endif
+    // Windows implementation end
 
     return "";
 }

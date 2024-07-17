@@ -21,6 +21,7 @@ namespace godot
 
     public:
         String get_active_window_title();
+        bool is_active_window_belonging_to_godot_project_process();
     };
 
 }
