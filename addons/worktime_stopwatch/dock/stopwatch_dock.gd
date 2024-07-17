@@ -14,7 +14,7 @@ var _stopwatch_status = StopwatchStatuses.RESET
 var _refresh_check_window_cooldown := REFRESH_CHECK_WINDOW_DELAY
 
 # stopwatch
-@onready var _stopwatch := Stopwatch.new()
+@onready var _stopwatch := WorktimeStopwatch.new()
 
 # theme-related variables
 @onready var start_icon = get_theme_icon("MainPlay", "EditorIcons")
