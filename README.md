@@ -4,7 +4,7 @@
  a time tracker plugin for the godot engine made to help you dedicate a set amount of "work time" to your project each day. It can even keep track of the foreground window and automatically stop the stopwatch when you get sidetracked and do other things (Windows-only at the moment).
 </p>
 <p>
- This plugin only supports Windows and (hopefully, haven't tested) Linux. If you build the GDExtension yourself it can work on MacOS but I don't wanna go through that process.
+ This plugin only supports Windows and (hopefully, haven't tested) Linux. It can work on macOS if you comment out a small portion of the gdscript code that requires a custom c++ class or build the gdextension yourself.
 </p>
 
 ## Screenshots
