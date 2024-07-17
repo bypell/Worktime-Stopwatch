@@ -1,7 +1,7 @@
 name: Builds
 run-name: Builds
 
-on: 
+on:
   workflow_dispatch:
 
 concurrency:
@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on:  ${{matrix.os}}
+    runs-on: ${{matrix.os}}
     name: ${{matrix.name}}
     strategy:
       matrix:
@@ -29,12 +29,11 @@ jobs:
             platform: linux
             arch: x86_64
     steps:
-
       - name: Checkout project
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      
+
       - name: Copy LICENSE file to addons folder
         run: |
           cp LICENSE addons/worktime_stopwatch/LICENSE
@@ -42,7 +41,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Set up SCons
         shell: bash
@@ -85,7 +84,7 @@ jobs:
           name: worktime_stopwatch_plugin-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.arch }}
           path: |
             ${{ github.workspace }}/addons/**
-        
+
   merge:
     runs-on: ubuntu-20.04
     needs: build
