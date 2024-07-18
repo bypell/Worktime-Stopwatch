@@ -1,10 +1,10 @@
 # Worktime-Stopwatch
 
 <p>
- a time tracker plugin for the godot engine made to help you dedicate a set amount of "work time" to your project each day. It can even keep track of the current foreground window and automatically stop the stopwatch when you get sidetracked and switch to a non-whitelisted window (this feature is Windows-only at the moment).
+ A time tracker plugin for the godot engine made to help you dedicate a set amount of "work time" to your project each day. It can even keep track of the current foreground window and automatically "block" the stopwatch when you get distracted and switch to a non-whitelisted window (this feature is Windows-only at the moment).
 </p>
 <p>
- This plugin only supports Windows and Linux. It can likely work on macOS if you comment out a small portion of gdscript code that requires a custom gdextension class that was not built for mac (and maybe remove the /bin folder if there's still an error).
+ This plugin only supports Windows and Linux. It should work on macOS if you comment out a small portion of gdscript code that requires a custom gdextension class that was not built for mac (and maybe remove the /bin folder if there's still an error). You could also build for mac yourself but there's no point since the extra features aren't yet supported anyway.
 </p>
 
 > [!NOTE]
@@ -20,6 +20,17 @@
 <p>
  <img alt="calendar" src="https://github.com/user-attachments/assets/52b19495-bbdf-4018-b18b-ebc02005a6cd">
 </p>
+
+# Things to note
+- When exporting your game, make sure to exclude the plugin and its related file(s).
+
+![image](https://github.com/user-attachments/assets/4e6b476c-e3d8-4333-bec0-2a48fd4d717b)
+
+- Also, you may or may not want to exclude the plugin from version control.
+The data for the calendar is kept in a file named "worktime_stopwatch_saved_data.tres" in your project's /addons folder.
+Your settings are kept in a file named "worktime_stopwatch_settings.cfg" which is also in your project's /addons folder.
+If you're working in a team, you should probably exclude it from version control. [You don't even need a .gitignore](https://stackoverflow.com/questions/653454/how-do-you-make-git-ignore-files-without-using-gitignore)
+
 
 # Cloning
 ```
