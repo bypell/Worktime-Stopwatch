@@ -8,7 +8,7 @@
 </p>
 
 > [!NOTE]
-> Most UI elements have a tooltip, just hover over them if you want more info about a setting, etc.
+> Most of the plugin's UI elements have a tooltip, just hover over them if you want more info about a setting, etc.
 
 ## Screenshots
 <p>
