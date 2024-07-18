@@ -1,6 +1,6 @@
 #include "register_types.h"
 
-#include "stopwatch.h"
+#include "focused_window_watcher.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -15,7 +15,7 @@ void initialize_stopwatch_module(ModuleInitializationLevel p_level)
         return;
     }
 
-    ClassDB::register_class<Stopwatch>();
+    ClassDB::register_class<FocusedWindowWatcher>();
 }
 
 void uninitialize_stopwatch_module(ModuleInitializationLevel p_level)
