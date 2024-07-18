@@ -27,7 +27,7 @@ bool FocusedWindowWatcher::is_active_window_belonging_to_godot_project_process()
 #endif
     // Windows implementation end
 
-    return false;
+    return true;
 }
 
 // Function to get the title of the foreground window (Windows-only, right now)

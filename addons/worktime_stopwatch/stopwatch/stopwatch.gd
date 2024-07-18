@@ -80,8 +80,8 @@ func refresh_check_current_window():
 		should_block = not _focused_window_watcher.is_active_window_belonging_to_godot_project_process()
 	
 	# other windows check
-	var title = _focused_window_watcher.get_active_window_title().to_lower()
-	if (should_block or not _check_godot_window_foreground) and _check_other_windows_foreground:
+	var title: String = _focused_window_watcher.get_active_window_title().to_lower()
+	if not title.is_empty() and ((should_block or not _check_godot_window_foreground) and _check_other_windows_foreground):
 		for keyword: String in _other_windows_keywords:
 			keyword = keyword.to_lower()
 			

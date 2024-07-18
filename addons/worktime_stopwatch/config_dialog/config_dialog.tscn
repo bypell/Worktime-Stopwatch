@@ -160,8 +160,8 @@ layout_mode = 2
 
 [node name="FocusedWindowLabel" type="Label" parent="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/FocusedWindow"]
 layout_mode = 2
-tooltip_text = "If the current foreground window doesn't correspond to any of the (checked) checkboxes below, the stopwatch will stop counting until you switch back on an allowed window.
-If both checkboxes are disabled, the stopwatch will not care about the current foreground window.
+tooltip_text = "If the current foreground window doesn't correspond to any of the checked checkboxes below, the stopwatch will stop counting until you switch back to an allowed window.
+If both checkboxes are unchecked, the stopwatch will keep counting no matter the foreground window (no activity limitation).
 This feature is Windows-only for now."
 mouse_filter = 1
 text = "Limit activity to:"
@@ -191,7 +191,13 @@ text = "Window with one of these keywords in its title:"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-tooltip_text = "Comma separated, case insensitive list of keywords that a focused window's title can contain to be considered \"whitelisted\" and to not block the stopwatch."
+tooltip_text = "Comma separated, case insensitive list of keywords that a focused window's title can 
+contain to be considered \"whitelisted\" and to not block the stopwatch.
+
+Trick: Some programs display the path of the file being modified in the window's title, sometimes replacing the app's name. 
+Adding the name of your project's directory to this list could be a good idea :) 
+For example, if your game assets are in \"C:\\Users\\username\\Documents\\MyGame\\.gdignore\\my_sources_files\", 
+you could add \"MyGame\" to the list and automatically whitelist all asset creation apps that display that path in their title."
 virtual_keyboard_enabled = false
 wrap_mode = 1
 
