@@ -4,14 +4,14 @@
  A time tracker plugin for the godot engine made to help you dedicate a set amount of "work time" to your project each day. It can even keep track of the current foreground window and automatically "block" the stopwatch when you get distracted and switch to a non-whitelisted window (this whole activity-limiting feature is Windows-only, at the moment).
 </p>
 <p>
- This plugin only supports Windows and Linux. It should work on macOS if your comment out the body of the refresh_check_current_window() function in stopwatch.gd and add a "pass" keyword there to prevent an error (and maybe remove the plugin's /bin folder if there's still an error). You could also instead build for mac yourself but there's no point in doing that since the activity limiting feature isn't supported anyway.
+ This plugin only supports Windows and Linux. It should work on macOS if you comment out the body of the refresh_check_current_window() function in stopwatch.gd and add a "pass" keyword there to prevent an error (and maybe remove the plugin's /bin folder if there's still an error). You could also instead build for mac yourself but there's no point in doing that since the activity limiting feature isn't supported anyway.
 </p>
 
 > [!NOTE]
 > Most of the plugin's UI elements have a tooltip, just hover over them if you want more info about a setting, etc.
 
 ## Installation
-1. Download the lastest release for your godot version [here](https://github.com/bypell/Worktime-Stopwatch/releases).
+1. Download the latest release for your godot version [here](https://github.com/bypell/Worktime-Stopwatch/releases).
 2. Unzip addons.zip and drag the resulting addons folder into your project's root directory.
 3. Restart the editor.
 4. Enable the plugin in Project settings -> plugins
