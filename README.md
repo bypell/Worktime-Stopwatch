@@ -24,7 +24,7 @@
  <img alt="calendar" src="https://github.com/user-attachments/assets/d7afba01-a7be-4d51-9fe7-fe41e94d755f">
 </p>
 <p>
- <img alt="calendar" src="https://github.com/user-attachments/assets/52b19495-bbdf-4018-b18b-ebc02005a6cd">
+ <img alt="calendar" src="https://github.com/user-attachments/assets/ddfa27b0-0d68-40e5-abdc-b12c914cd014">
 </p>
 
 ## Things to note
