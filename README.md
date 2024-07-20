@@ -39,7 +39,12 @@
 
 
 
-# Cloning
+# Cloning and building godot-cpp + gdextension
 ```
 git clone --recurse-submodules https://github.com/bypell/Worktime-Stopwatch.git
+cd Worktime-Stopwatch
+cd godot-cpp
+scons
+cd ..
+scons
 ```
