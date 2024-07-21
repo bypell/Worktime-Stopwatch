@@ -78,10 +78,10 @@ jobs:
         run: |
           Remove-Item addons/worktime_stopwatch/bin/* -Include *.exp,*.lib,*.pdb -Force
 
-      - name: Create WorktimeStopwatch folder
+      - name: Create WorktimeStopwatch folders (nested)
         run: |
-          mkdir -p WorktimeStopwatch
-          mv addons WorktimeStopwatch
+          mkdir -p WorktimeStopwatch/WorktimeStopwatch
+          mv addons WorktimeStopwatch/WorktimeStopwatch
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
