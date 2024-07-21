@@ -11,7 +11,7 @@
 > Most of the plugin's UI elements have a tooltip, just hover over them if you want more info about a setting, etc.
 
 ## Installation
-Now also available in the asset library!
+Also available in the asset library!
 
 Manual way:
 1. Download the latest release for your godot version [here](https://github.com/bypell/Worktime-Stopwatch/releases).
