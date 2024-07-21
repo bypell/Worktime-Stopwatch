@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
 concurrency:
- group: ${{ github.workflow }}
- cancel-in-progress: true
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -78,12 +78,17 @@ jobs:
         run: |
           Remove-Item addons/worktime_stopwatch/bin/* -Include *.exp,*.lib,*.pdb -Force
 
+      - name: Create WorktimeStopwatch folder
+        run: |
+          mkdir -p WorktimeStopwatch
+          mv addons WorktimeStopwatch
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: worktime_stopwatch_plugin-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.arch }}
           path: |
-            ${{ github.workspace }}/addons
+            ${{ github.workspace }}/WorktimeStopwatch
 
   merge:
     runs-on: ubuntu-20.04
