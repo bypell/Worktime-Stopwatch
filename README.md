@@ -15,7 +15,7 @@ Also available in the asset library!
 
 Manual way:
 1. Download the latest release for your godot version [here](https://github.com/bypell/Worktime-Stopwatch/releases).
-2. Unzip WorktimeStopwatch.zip, open it and drag the addons folder into your project's root directory.
+2. Unzip WorktimeStopwatch.zip and drag the addons folder into your project's root directory.
 3. Restart the editor.
 4. Enable the plugin in Project settings -> plugins
 
