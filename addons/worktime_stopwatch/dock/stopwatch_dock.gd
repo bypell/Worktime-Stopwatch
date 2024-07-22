@@ -34,6 +34,10 @@ var _refresh_check_window_cooldown := REFRESH_CHECK_WINDOW_DELAY
 func _ready():
 	set_process(false)
 	
+	# TODO use is_part_of_edited_scene() once it's exposed
+	if not get_tree().edited_scene_root == null and get_tree().edited_scene_root in [self, owner]:
+		return
+	
 	# apply icons
 	start_pause_button.icon = start_icon
 	reset_button.icon = reset_icon
