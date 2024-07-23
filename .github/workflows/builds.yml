@@ -34,6 +34,16 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Cache .scons_cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/.scons_cache/
+            ${{ github.workspace }}/godot-cpp/.scons_cache/
+          key: ${{ runner.os }}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-cache-${{ hashFiles('**/SConstruct', '**/*.cpp', '**/*.h') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-cache-
+
       - name: Copy LICENSE file to addons folder
         run: |
           cp LICENSE addons/worktime_stopwatch/LICENSE
@@ -64,12 +74,16 @@ jobs:
 
       - name: Compile godot-cpp
         shell: sh
+        env:
+          SCONS_CACHE: ${{ github.workspace }}/godot-cpp/.scons_cache/
         run: |
           scons target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}'
         working-directory: godot-cpp
 
       - name: Compile Extension
         shell: sh
+        env:
+          SCONS_CACHE: ${{ github.workspace }}/.scons_cache/
         run: |
           scons target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}'
 
