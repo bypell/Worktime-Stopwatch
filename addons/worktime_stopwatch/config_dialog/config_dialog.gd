@@ -2,6 +2,7 @@
 extends Window
 
 signal progress_reset_accepted
+signal requested_save_calendar_as_csv(path: String, delimiter: String)
 
 @onready var scroll_container : ScrollContainer = %ScrollContainer
 @onready var calendar_ui: MarginContainer = %Calendar
@@ -41,3 +42,7 @@ func _on_reset_progress_button_pressed() -> void:
 
 func _on_reset_progress_confirmation_dialog_confirmed() -> void:
 	progress_reset_accepted.emit()
+
+
+func _on_extra_csv_export_destination_chosen(path: String, delimiter: String) -> void:
+	requested_save_calendar_as_csv.emit(path, delimiter)

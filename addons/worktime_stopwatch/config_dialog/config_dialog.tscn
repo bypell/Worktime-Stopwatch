@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://nntvl76rwuvf"]
+[gd_scene load_steps=6 format=3 uid="uid://nntvl76rwuvf"]
 
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/config_dialog.gd" id="1_4yrt7"]
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/calendar_ui.gd" id="2_o3enq"]
 [ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/settings_ui.gd" id="3_2k87h"]
+[ext_resource type="Script" path="res://addons/worktime_stopwatch/config_dialog/extra_actions_ui.gd" id="4_57odq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0bsyg"]
 content_margin_left = 4.0
@@ -41,7 +42,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 1
+current_tab = 2
 
 [node name="Calendar" type="MarginContainer" parent="TabContainer"]
 unique_name_in_owner = true
@@ -64,11 +65,13 @@ alignment = 1
 [node name="StartingDateLabel" type="Label" parent="TabContainer/Calendar/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "The date at which you first ran the plugin or reset your progression."
 text = "Starting date: 1970-01-01"
 
 [node name="ResetProgressButton" type="Button" parent="TabContainer/Calendar/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Reset your progression. (You'll be back to day 1)"
 text = "Reset"
 
 [node name="ResetProgressConfirmationDialog" type="ConfirmationDialog" parent="TabContainer/Calendar/VBoxContainer/HBoxContainer/ResetProgressButton"]
@@ -97,6 +100,7 @@ columns = 7
 
 [node name="Settings" type="MarginContainer" parent="TabContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 theme_override_constants/margin_left = 10
@@ -229,6 +233,57 @@ position = Vector2i(0, 36)
 size = Vector2i(295, 100)
 dialog_text = "Reset settings to the default values?"
 
+[node name="Extra" type="MarginContainer" parent="TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("4_57odq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Extra"]
+layout_mode = 2
+
+[node name="ExportCSVLabel" type="Label" parent="TabContainer/Extra/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Export calendar data for all days (excluding today) to a CSV file using the given delimiter."
+text = "Export to CSV:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Extra/VBoxContainer"]
+layout_mode = 2
+
+[node name="DelimiterLabel" type="Label" parent="TabContainer/Extra/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Delimiter:"
+
+[node name="CSVExportDelimiterLineEdit" type="LineEdit" parent="TabContainer/Extra/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Custom delimiter"
+placeholder_text = ","
+
+[node name="ExportCSV" type="Button" parent="TabContainer/Extra/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Export calendar data for all days (excluding today) to a CSV file using the given delimiter."
+text = "Export calendar data to CSV"
+
+[node name="SaveCSVDialog" type="FileDialog" parent="TabContainer/Extra/VBoxContainer/ExportCSV"]
+unique_name_in_owner = true
+title = "CSV Export"
+size = Vector2i(700, 400)
+access = 2
+filters = PackedStringArray("*.csv")
+
+[node name="Warning" type="Label" parent="TabContainer/Extra/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 11
+text = "DO NOT SAVE IN YOUR PROJECT DIRECTORY OTHERWISE ITS GONNA 
+GET IMPORTED AND TRANSLATION BULLSHIT FILES WILL BE CREATED!!!
+
+ALSO, IF YOU WANT TO OVERWRITE AN EXISTING FILE, MAKE SURE THAT 
+IT'S NOT BEING EDITED IN ANOTHER PROGRAM."
+
 [connection signal="pressed" from="TabContainer/Calendar/VBoxContainer/HBoxContainer/ResetProgressButton" to="." method="_on_reset_progress_button_pressed"]
 [connection signal="confirmed" from="TabContainer/Calendar/VBoxContainer/HBoxContainer/ResetProgressButton/ResetProgressConfirmationDialog" to="." method="_on_reset_progress_confirmation_dialog_confirmed"]
 [connection signal="value_changed" from="TabContainer/Settings/VBoxContainer/ScrollContainer/VBoxContainer/MinimumWorkTime/HBoxContainer/DailyWorkTimeSpinBox" to="TabContainer/Settings" method="_setting_changed" unbinds=1]
@@ -241,3 +296,6 @@ dialog_text = "Reset settings to the default values?"
 [connection signal="pressed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/CancelButton" to="TabContainer/Settings" method="_set_ui_to_settings"]
 [connection signal="pressed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/ResetButton" to="TabContainer/Settings" method="_reset_settings_requested"]
 [connection signal="confirmed" from="TabContainer/Settings/VBoxContainer/HBoxContainer/ResetButton/ResetConfirmationDialog" to="TabContainer/Settings" method="_reset_settings_accepted"]
+[connection signal="csv_export_destination_chosen" from="TabContainer/Extra" to="." method="_on_extra_csv_export_destination_chosen"]
+[connection signal="pressed" from="TabContainer/Extra/VBoxContainer/ExportCSV" to="TabContainer/Extra" method="_on_export_csv_pressed"]
+[connection signal="confirmed" from="TabContainer/Extra/VBoxContainer/ExportCSV/SaveCSVDialog" to="TabContainer/Extra" method="_on_save_csv_dialog_confirmed"]

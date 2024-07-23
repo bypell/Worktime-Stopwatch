@@ -71,7 +71,7 @@ func _set_tooltip():
 
 
 func _format_time(milliseconds : float) -> String:
-	var t := abs(milliseconds)
+	var t := absf(milliseconds)
 	var total_seconds = int(t) / 1000
 	var hours = total_seconds / 3600
 	var minutes = (total_seconds / 60) % 60
