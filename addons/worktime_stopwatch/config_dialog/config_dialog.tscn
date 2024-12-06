@@ -53,6 +53,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 script = ExtResource("2_o3enq")
+metadata/_tab_index = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Calendar"]
 layout_mode = 2
@@ -104,6 +105,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 script = ExtResource("3_2k87h")
+metadata/_tab_index = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Settings"]
 layout_mode = 2
@@ -191,13 +193,13 @@ text = "Window with one of these keywords in its title:"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-tooltip_text = "Comma separated, case insensitive list of keywords that a focused window's title can 
+tooltip_text = "Comma separated, case sensitive list of keywords that a focused window's title can 
 contain to be considered \"whitelisted\" and to not block the stopwatch.
 
 Trick: Some programs display the path of the file being modified in the window's title, sometimes replacing the app's name. 
 Adding the name of your project's directory to this list could be a good idea :) 
 For example, if your game assets are in \"C:\\Users\\username\\Documents\\MyGame\\.gdignore\\my_sources_files\", 
-you could add \"MyGame\" to the list and automatically whitelist all asset creation apps that display that path in their title."
+you could add the string \"MyGame\" to the list and automatically whitelist all asset creation apps that display that path in their title."
 virtual_keyboard_enabled = false
 wrap_mode = 1
 

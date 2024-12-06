@@ -8,17 +8,17 @@ const DEFAULT_AUTO_START_STOPWATCH_ON_LOAD := false
 const DEFAULT_CURRENT_DAILY_WORK_TIME_MINUTES := 20.0
 const DEFAULT_GODOT_PROJECT_WINDOW := true
 const DEFAULT_OTHER_WINDOWS := true
-const DEFAULT_OTHER_WINDOWS_KEYWORDS := "Blender, Krita, ArmorPaint, Aseprite, LMMS, Audacity, FL Studio"
+const DEFAULT_OTHER_WINDOWS_KEYWORDS := "Blender, ArmorPaint, Aseprite, LMMS, Audacity, FL Studio"
 const DEFAULT_CONTINUOUS_DATE_CHECK := false
 
-var config : ConfigFile
+var config: ConfigFile
 
-var auto_start_stopwatch_on_load : bool
-var current_daily_work_time_minutes : float
+var auto_start_stopwatch_on_load: bool
+var current_daily_work_time_minutes: float
 var godot_project_window: bool
 var other_windows: bool
 var other_windows_keywords: String
-var continuous_date_check : bool
+var continuous_date_check: bool
 
 
 func _init() -> void:
@@ -35,7 +35,7 @@ func load_default_settings():
 
 
 func are_settings_default() -> bool:
-	var checks : Array[Callable] = [
+	var checks: Array[Callable] = [
 		func(): return auto_start_stopwatch_on_load == DEFAULT_AUTO_START_STOPWATCH_ON_LOAD,
 		func(): return is_equal_approx(current_daily_work_time_minutes, DEFAULT_CURRENT_DAILY_WORK_TIME_MINUTES),
 		func(): return godot_project_window == DEFAULT_GODOT_PROJECT_WINDOW,
