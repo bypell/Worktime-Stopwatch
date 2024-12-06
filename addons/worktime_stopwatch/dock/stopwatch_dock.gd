@@ -34,6 +34,10 @@ var _refresh_check_window_cooldown := REFRESH_CHECK_WINDOW_DELAY
 func _ready():
 	set_process(false)
 	
+	# TODO use is_part_of_edited_scene() once it's exposed
+	if not get_tree().edited_scene_root == null and get_tree().edited_scene_root in [self, owner]:
+		return
+	
 	# apply icons
 	start_pause_button.icon = start_icon
 	reset_button.icon = reset_icon
@@ -65,7 +69,7 @@ func _process(delta):
 		_refresh_check_window_cooldown = REFRESH_CHECK_WINDOW_DELAY
 		
 		#if Input.is_key_pressed(KEY_0):
-		#	_stopwatch.set_current_time(_stopwatch.get_current_time() + 60000)
+			#_stopwatch.set_current_time(_stopwatch.get_current_time() + 60000)
 	
 	# if counting and not blocked, add to _elapsed_time and update the corresponding label
 	if _stopwatch_status == StopwatchStatuses.COUNTING:

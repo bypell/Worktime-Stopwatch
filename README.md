@@ -1,18 +1,24 @@
 # Worktime-Stopwatch
 
 <p>
- A time tracker plugin for the godot engine made to help you dedicate a set amount of "work time" to your project each day. It can even keep track of the current foreground window and automatically "block" the stopwatch when you get distracted and switch to a non-whitelisted window (this whole activity-limiting feature is Windows-only, at the moment).
+ A time tracker plugin for the godot engine made to help you dedicate a set amount of "work time" to your project each day. 
+</p>
+<p>
+ It can even keep track of the current foreground window and automatically "block" the stopwatch when you get distracted and switch to a non-whitelisted window (this is Windows-only, at the moment).
 </p>
 <p>
  This plugin only supports Windows and Linux. It should work on macOS if you comment out some code in stopwatch.gd. You could also instead build for mac yourself but there's no point in doing that since the activity limiting feature isn't supported anyway.
 </p>
 
 > [!NOTE]
-> Most of the plugin's UI elements have a tooltip, just hover over them if you want more info about a setting, etc.
+> Most of the plugin's UI elements have a tooltip, just hover over them if you want more info about a setting, etc. This includes one or more labels that you wouldn't think have a tooltip.
 
 ## Installation
+Also available in the asset library!
+
+Manual way:
 1. Download the latest release for your godot version [here](https://github.com/bypell/Worktime-Stopwatch/releases).
-2. Unzip addons.zip and drag the resulting addons folder into your project's root directory.
+2. Unzip WorktimeStopwatch.zip and drag the addons folder into your project's root directory.
 3. Restart the editor.
 4. Enable the plugin in Project settings -> plugins
 
@@ -24,7 +30,7 @@
  <img alt="calendar" src="https://github.com/user-attachments/assets/d7afba01-a7be-4d51-9fe7-fe41e94d755f">
 </p>
 <p>
- <img alt="calendar" src="https://github.com/user-attachments/assets/52b19495-bbdf-4018-b18b-ebc02005a6cd">
+ <img alt="calendar" src="https://github.com/user-attachments/assets/ddfa27b0-0d68-40e5-abdc-b12c914cd014">
 </p>
 
 ## Things to note
@@ -39,7 +45,12 @@
 
 
 
-# Cloning
+# Cloning and building godot-cpp + gdextension
 ```
 git clone --recurse-submodules https://github.com/bypell/Worktime-Stopwatch.git
+cd Worktime-Stopwatch
+cd godot-cpp
+scons
+cd ..
+scons
 ```

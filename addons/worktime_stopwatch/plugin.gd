@@ -19,7 +19,7 @@ var _continuous_date_check_cooldown := CONTINUOUS_DATE_CHECK_DELAY
 var _continuous_date_check := false:
 	set(value):
 		_continuous_date_check = value
-		set_process(value) # TODO should remove if more member variables related to a setting need process
+		set_process(value) # HACK should remove if more member variables related to a setting need process
 		if value:
 			_continuous_date_check_cooldown = CONTINUOUS_DATE_CHECK_DELAY
 
@@ -48,13 +48,28 @@ func _enter_tree() -> void:
 	main_dock_instance.reset_stopwatch.connect(_save_current_work_time)
 	main_dock_instance.started_stopwatch.connect(_save_current_work_time)
 	
-	# connecting config window signal
+	# connecting config window signals
 	config_window_instance.progress_reset_accepted.connect(
 			func():
 				_create_and_set_new_saved_data_object()
 				main_dock_instance.force_reset_current_work_time()
 				_refresh_stopwatch_widget()
 				_refresh_config_window()
+	)
+	config_window_instance.requested_save_calendar_as_csv.connect(
+			func(path: String, delimiter: String):
+				var file := FileAccess.open(path, FileAccess.WRITE)
+				file.store_line("Day number,Date,Work time (seconds),Target work time (seconds)".replace(",", delimiter))
+				# store every saved data
+				for day_data in saved_data_instance.previous_days_data:
+					var data : PackedStringArray = [
+						str(day_data.day_number), 
+						Time.get_date_string_from_unix_time((Time.get_unix_time_from_datetime_dict(day_data.date))), 
+						str((int(day_data.work_time) / 1000)), 
+						str(int(day_data.target_work_time) / 1000),
+					]
+					file.store_csv_line(data, delimiter)
+				file.close()
 	)
 	
 	# setting up settings ui

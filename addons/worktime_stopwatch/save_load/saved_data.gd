@@ -1,7 +1,7 @@
 @tool
 extends Resource
 
-const SAVE_DATA_PATH := "res://addons/worktime_stopwatch_saved_data.res"
+const SAVE_DATA_PATH := "res://addons/worktime_stopwatch_saved_data.tres"
 
 @export var starting_date : Dictionary = {}
 @export var current_day_data : Resource = null
@@ -13,6 +13,9 @@ func save_data() -> int:
 
 
 static func load_saved_data() -> Resource:
+	if FileAccess.file_exists("res://addons/worktime_stopwatch_saved_data.res"):
+		return load("res://addons/worktime_stopwatch_saved_data.res")
+	
 	return load(SAVE_DATA_PATH)
 
 
