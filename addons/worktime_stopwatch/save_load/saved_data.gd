@@ -13,7 +13,10 @@ func save_data() -> int:
 
 
 static func load_saved_data() -> Resource:
-	if FileAccess.file_exists("res://addons/worktime_stopwatch_saved_data.res"):
+	if FileAccess.file_exists("addons/worktime_stopwatch_saved_data.tres"):
+		return load(SAVE_DATA_PATH)
+	
+	if FileAccess.file_exists("addons/worktime_stopwatch_saved_data.res"):
 		return load("res://addons/worktime_stopwatch_saved_data.res")
 	
 	return load(SAVE_DATA_PATH)
